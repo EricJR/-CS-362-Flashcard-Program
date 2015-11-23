@@ -56,7 +56,7 @@ class Application(tk.Frame):
         #http://stackoverflow.com/questions/15008359/python-3-and-tkinter-opening-new-window-by-clicking-the-button
         #http://www.python-course.eu/tkinter_message_widget.php
     def createWidgets(self):
-        self.master.title("Team Syntax Error's Flash Card Program ¯\_(ツ)_/¯")
+        self.master.title("Team Syntax Error's Flash Card Program ¯\_(ツ)_/¯") # ¯\_(シ)_/¯
         self.master.geometry("400x400")
         self.master.config(cursor='dot')
         
