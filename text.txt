@@ -1,9 +1,9 @@
-@Biology Cards~This deck was made by Eric Roe to study for Biology 101.
-What color is the sky?~Blue
-What is the best number?~3
-This?~Is Sparta
-My arms are not legs?~Yes.
-@Cooler Deck of Cards~This deck is much better than the first deck made.
-Why?~Because I said so.
-How long do I have to do this for?~Forever.
-Oh, it's IN the computer?~It's in the computer.
+@@@Biology Cards~~This deck was made by Eric Roe to study for Biology 101.
+What color is the sky?~~Blue
+What is the best number?~~3
+This?~~Is Sparta
+My arms are not legs?~~Hopefully so.
+@@@Cooler Deck of Cards~~This deck is much better than the first deck made.
+Why?~~Because I said so.
+How long do I have to do this for?~~Forever.
+Oh, it's IN the computer?~~It's in the computer.
