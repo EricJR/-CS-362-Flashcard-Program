@@ -1,13 +1,52 @@
 #!/Library/Frameworks/Python.framework/Versions/3.4/bin/python3
-#
-# #Team: Syntax Error
-# #Project: flashCards.py
-# #Compiler: Python3
-# #Program Description:
-#
-# #tkinter to exe: https://www.youtube.com/watch?v=XctDhMHQlj0
-#
-# #IMPORTS:
+
+######################################################
+I will work on implementing the view card sometime later this week if I get the chance. 
+Here is my P.CODE, feel free to give me any comments/advice/feedback. 
+
+PSUEDO CODE:
+implement showCard as a bool
+obtain list of questions
+obtain list of answers
+
+bool showCard = false
+
+if showcard == false:
+          hide answer
+elif showcard == true:
+          show answer 
+
+click button showCard = true
+
+if click button nextCard
+       increment array
+       showCard == false
+       
+       
+if click button previousCard
+       decrement array
+       showCard == false
+       
+       
+if click button quitProgram
+      exit program
+#########################################################
+
+
+
+
+Notes: 
+1 card = 
+
+
+
+
+
+
+
+
+
+
 # #-----------------
 import os
 import sys
