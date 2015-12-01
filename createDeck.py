@@ -19,6 +19,7 @@ class createDeck(tk.Frame):
         tk.Frame.__init__(self, master)
         self.pack()
         self.createWidgets()
+        self.printMessage()
 
     def createWidgets(self):
         self.master.title("Create Deck")
@@ -42,16 +43,13 @@ class createDeck(tk.Frame):
         self.button = Button(self, text="Save Deck", command=self.printMessage)
         self.button.grid(row=2, column=1)
 
-
-    # Print deck to textfile
+    # Print deck to textfile. Display an OK messagebox if successful.
     def printMessage(self):
         text_file = open("Flashcards.txt", "a")
         text_file.write("@@@" + self.usertext.get() + "~~" + self.usertext2.get() + "\n")
         text_file.close()
         #print("Writing to file...")
         tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.usertext.get() + "!")
-
-
 
 root = tk.Tk()
 app = createDeck(master=root)
