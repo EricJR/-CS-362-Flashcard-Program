@@ -44,7 +44,7 @@ class createDeck(tk.Frame):
 
     # Print deck to textfile. Display an OK messagebox if successful.
     def printMessage(self):
-        text_file = open("Flashcards.txt", "a")
+        text_file = open("flashCards.txt", "a")
         text_file.write("@@@" + self.usertext.get() + "~~" + self.usertext2.get() + "\n")
         text_file.close()
         #print("Writing to file...")
