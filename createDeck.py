@@ -19,7 +19,6 @@ class createDeck(tk.Frame):
         tk.Frame.__init__(self, master)
         self.pack()
         self.createWidgets()
-        self.printMessage()
 
     def createWidgets(self):
         self.master.title("Create Deck")
