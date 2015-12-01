@@ -12,8 +12,9 @@ import tkinter.messagebox
 # Flash Cards array:
 flashCards = []
 
-
-class Application(tk.Frame):
+#Gets deck name and deck description from user and creates the deck.
+#Stores the deck information into a text file
+class createDeck(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.pack()
@@ -53,5 +54,5 @@ class Application(tk.Frame):
 
 
 root = tk.Tk()
-app = Application(master=root)
+app = createDeck(master=root)
 app.mainloop()
