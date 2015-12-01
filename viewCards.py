@@ -35,13 +35,6 @@ if click button quitProgram
 
 
 
-Notes: 
-1 card = 
-
-
-
-
-
 
 
 
