@@ -93,7 +93,7 @@ class createDeck(tk.Frame):
             tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name and Description!")
         elif len(self.usertext.get()) == 0:
             tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name!")
-        elif len(self.usertext.get()) == 0:
+        elif len(self.usertext2.get()) == 0:
             tkinter.messagebox.showinfo("Error", "You need to enter a Deck Description!")
         else:
             text_file = open("Flashcards.txt", "a")
