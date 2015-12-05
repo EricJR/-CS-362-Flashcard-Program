@@ -83,12 +83,12 @@ class createDeck(tk.Frame):
         e2.grid(row=1, column=1)
 
         # User needs to click save deck
-        button = Button(self, text="Save Deck", command=self.printMessage)
+        button = Button(self, text="Save Deck", command=self.printContents)
         button.grid(row=2, column=1)
 
 
     # Print deck to textfile. Display an OK messagebox if successful. Will check if user actually entered deck name and description before writing to file.
-    def printMessage(self):
+    def printContents(self):
         if len(self.usertext.get()) == 0 and len(self.usertext2.get()) == 0:
             tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name and Description!")
         elif len(self.usertext.get()) == 0:
@@ -126,14 +126,14 @@ class addCards(tk.Frame):
         self.e2.grid(row=1, column=1)
 
         # User needs to click save deck
-        button = Button(self, text="Save Card", command=self.printMessage)
+        button = Button(self, text="Save Card", command=self.printContents)
         button.grid(row=2, column=1)
 
         button2 = Button(self, text="Exit", command=self.quit)
         button2.grid(row=3, column=1)
 
     #Checks if user entered both front and back information. If they did it will write question and answer to text file.
-    def printMessage(self):
+    def printContents(self):
         if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
             tkinter.messagebox.showinfo("Error", "You need to enter a Question and Answer!")
         elif len(self.cardFront.get()) == 0:
