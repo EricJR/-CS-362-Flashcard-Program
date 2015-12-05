@@ -75,12 +75,12 @@ class createDeck(tk.Frame):
 
         # Labels for "Enter Deck Name" and "Enter Deck Description"
         Label(self, text="Enter Deck Name").grid(row=0)
-        e1 = tk.Entry(self, textvariable=self.usertext)
-        e1.grid(row=0, column=1)
+        self.e1 = tk.Entry(self, textvariable=self.usertext)
+        self.e1.grid(row=0, column=1)
 
         Label(self, text="Enter Deck Description").grid(row=1)
-        e2 = tk.Entry(self, textvariable=self.usertext2)
-        e2.grid(row=1, column=1)
+        self.e2 = tk.Entry(self, textvariable=self.usertext2)
+        self.e2.grid(row=1, column=1)
 
         # User needs to click save deck
         button = Button(self, text="Save Deck", command=self.printContents)
@@ -102,6 +102,8 @@ class createDeck(tk.Frame):
             # print("Writing to file...")
             tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.usertext.get() + "!")
             self.controller.show_frame(addCards)
+            self.e1.delete(0,END)
+            self.e2.delete(0,END)
 
 
 class addCards(tk.Frame):
@@ -110,6 +112,9 @@ class addCards(tk.Frame):
         #self.pack()
         self.createWidgets()
         self.controller = controller
+
+    def goBack(self):
+        self.controller.show_frame(createDeck)
 
     def createWidgets(self):
 
@@ -129,8 +134,12 @@ class addCards(tk.Frame):
         button = Button(self, text="Save Card", command=self.printContents)
         button.grid(row=2, column=1)
 
-        button2 = Button(self, text="Exit", command=self.quit)
-        button2.grid(row=3, column=1)
+        button2 = Button(self, text="Go Back to Create Deck", command = self.goBack)
+        button2.grid(row=3,column=1)
+
+        #Exit button
+        button3 = Button(self, text="Exit", command=self.quit)
+        button3.grid(row=4, column=1)
 
     #Checks if user entered both front and back information. If they did it will write question and answer to text file.
     def printContents(self):
