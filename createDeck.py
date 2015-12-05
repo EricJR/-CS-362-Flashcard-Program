@@ -15,7 +15,6 @@ import tkinter.messagebox
 # Flash Cards array:
 flashCards = []
 
-
 class switchWindow(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -87,14 +86,22 @@ class createDeck(tk.Frame):
         button = Button(self, text="Save Deck", command=self.printMessage)
         button.grid(row=2, column=1)
 
-    # Print deck to textfile. Display an OK messagebox if successful.
+
+    # Print deck to textfile. Display an OK messagebox if successful. Will check if user actually entered deck name and description before writing to file.
     def printMessage(self):
-        text_file = open("Flashcards.txt", "a")
-        text_file.write("@@@" + self.usertext.get() + "~~" + self.usertext2.get() + "\n")
-        text_file.close()
-        # print("Writing to file...")
-        tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.usertext.get() + "!")
-        self.controller.show_frame(addCards)
+        if len(self.usertext.get()) == 0 and len(self.usertext2.get()) == 0:
+            tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name and Description!")
+        elif len(self.usertext.get()) == 0:
+            tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name!")
+        elif len(self.usertext.get()) == 0:
+            tkinter.messagebox.showinfo("Error", "You need to enter a Deck Description!")
+        else:
+            text_file = open("Flashcards.txt", "a")
+            text_file.write("@@@" + self.usertext.get() + "~~" + self.usertext2.get() + "\n")
+            text_file.close()
+            # print("Writing to file...")
+            tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.usertext.get() + "!")
+            self.controller.show_frame(addCards)
 
 
 class addCards(tk.Frame):
@@ -110,11 +117,11 @@ class addCards(tk.Frame):
         self.cardFront = StringVar()
         self.backCard = StringVar()
 
-        Label(self, text="Enter Front Card Information").grid(row=0)
+        Label(self, text="Enter Question").grid(row=0)
         self.e1 = tk.Entry(self, textvariable=self.cardFront)
         self.e1.grid(row=0, column=1)
 
-        Label(self, text="Enter Back Card Information").grid(row=1)
+        Label(self, text="Enter Answer").grid(row=1)
         self.e2 = tk.Entry(self, textvariable=self.backCard)
         self.e2.grid(row=1, column=1)
 
@@ -125,18 +132,30 @@ class addCards(tk.Frame):
         button2 = Button(self, text="Exit", command=self.quit)
         button2.grid(row=3, column=1)
 
+    #Checks if user entered both front and back information. If they did it will write question and answer to text file.
     def printMessage(self):
-        text_file = open("Flashcards.txt", "a")
-        text_file.write(self.cardFront.get() + "~~" + self.backCard.get() + "\n")
-        text_file.close()
-        #Delete the Contents of the 2 labels
-        self.e1.delete(0,END)
-        self.e2.delete(0,END)
-        #print("Writing to file...")
-        tkinter.messagebox.showinfo("Card Added!", "Successfully added FlashCard to your deck.")
+        if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
+            tkinter.messagebox.showinfo("Error", "You need to enter a Question and Answer!")
+        elif len(self.cardFront.get()) == 0:
+            tkinter.messagebox.showinfo("Error", "You need to enter a Question!")
+        elif len(self.backCard.get()) == 0:
+            tkinter.messagebox.showinfo("Error", "You need to enter an Answer!")
+        else:
+            text_file = open("Flashcards.txt", "a")
+            text_file.write(self.cardFront.get() + "~~" + self.backCard.get() + "\n")
+            text_file.close()
+            #Delete the Contents of the 2 labels
+            self.e1.delete(0,END)
+            self.e2.delete(0,END)
+            #print("Writing to file...")
+            tkinter.messagebox.showinfo("Card Added!", "Successfully added FlashCard to your deck.")
 
     def quit(self):
         self.controller.quitProgram()
 
-app = switchWindow()
-app.mainloop()
+def main():
+    app = switchWindow()
+    app.mainloop()
+
+if __name__ == "__main__":
+    main()
