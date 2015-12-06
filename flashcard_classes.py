@@ -74,53 +74,32 @@ class FlashcardController:
                     add_cards_choice = input("Add more cards? (Y/N): ")
                 #for card in deck.get_cards():
                 #    print("Added card:\n",card)
+    
+    def delete_deck(self, deck_name_to_delete):
+        for deck in self._decks:
+            if deck.get_name() == deck_name_to_delete:
+                self._decks.remove(deck)
+                break
                 
     def __str__(self):
-        #to_print = ""
-        #for deck in self._decks:
-        #    to_print += str(deck) + ", "
-         
-        #return ("%s" % (to_print[:-2]))
-        
-        # Convert the Deck objects in the decks[] list to str, and modify the string
-        # with a comma between each object for easier reading.
         return (", ".join(map(str, self._decks)))
-
-
-
-
-
-
-
-
 
 class FileSystemStorage:
     def __init__(self):
         self.file_name = "flashcards_file.txt"
 
-        #filepath = os.path.join("/library",self.file_name)
-
-        #subdir = os.path.join("/library/" + self.file_name)
-
-        #try:
-        #    os.mkdir(subdir)
-        #except:
-        #    print("failed")
-
         # Try to open the file. If it does not exist (first user run), it will be created. Otherwise, it confirms success.
-        with open(self.file_name,"w+") as f:
+        with open(self.file_name,"a+") as f:
             pass
-
 
     def get_file_name(self):
         return self.file_name
 
     def read_from_file(self, ctrler):
-        infile = self.file_name
         file_lines = []
         RE_lines = []
         
-        with open(infile, "r") as ifh:
+        with open(self.file_name, "r") as ifh:
             for line in ifh:
                 file_lines.append(line)
                 
@@ -149,10 +128,7 @@ class FileSystemStorage:
         return ctrler
 
     def write_to_file(self, ctrler):
-        outfile = self.file_name
-        #outfile = os.path.abspath("library/" + self.file_name)
-      
-        with open(outfile, "w") as f:
+        with open(self.file_name, "w") as f:
             for deck in ctrler.get_decks():
                 deck_print = "@@@" + deck.get_name() + "~~" + deck.get_description() + "\n"
                 f.write(deck_print)
