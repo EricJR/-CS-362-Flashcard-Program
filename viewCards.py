@@ -139,8 +139,6 @@ class FileSystemStorage:
                     card_print = card.get_term() + "~~" + card.get_definition() + "\n"
                     f.write(card_print)
 
-
- 
 ########################################################################
 class MyApp(object):
     """"""
@@ -175,21 +173,26 @@ class MyApp(object):
 
         hi_there = Tk.Message(self.frame)
         hi_there["text"] = "\nNow Viewing Deck!\n"
+        hi_there["width"] = 1000
         hi_there.pack(side = "top")
 
         self.questionGUI = Tk.Message(self.frame)
         self.questionGUI["fg"] = 'black'
+        self.questionGUI["width"] = 600
         self.questionGUI["text"] = self.questionString[self.index] + "\n"
         self.questionGUI.pack(side = "top")
 
         self.answerGUI = Tk.Message(self.frame)
         self.answerGUI["fg"] = 'white'  
+        self.answerGUI["width"] = 600
         self.answerGUI["text"] = self.answerString[self.index] + "\n"
         self.answerGUI.pack(side = "top")
 
         answer = Tk.Button(self.frame, text="Flip")
         answer["command"] = lambda: self.openFrame()
         answer.pack(side = "top")
+        
+        
 
         previousCard = Tk.Button(self.frame, text="Previous Card")
         previousCard["command"] = lambda : self.decrementIndex()
@@ -247,6 +250,6 @@ class MyApp(object):
 #----------------------------------------------------------------------
 if __name__ == "__main__":
     root = Tk.Tk()
-    root.geometry("500x500")
+    root.geometry("700x500")
     app = MyApp(root)
     root.mainloop()
