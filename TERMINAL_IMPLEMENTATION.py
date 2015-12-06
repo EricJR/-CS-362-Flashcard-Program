@@ -1,7 +1,7 @@
 # Testing to make it work in Terminal.
 # Next steps: After this works, we can work on using tkinter with it.
 
-from file_reader import FileSystemStorage
+from flashcard_classes import Flashcard, Deck, FlashcardController, FileSystemStorage
 
 def main():
     controller = FlashcardController()
