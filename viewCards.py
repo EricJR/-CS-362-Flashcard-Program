@@ -153,7 +153,6 @@ class MyApp(object):
         self.frame = Tk.Frame(parent)
         self.frame.pack()
         
-        
         self.questionString = []
         self.answerString = [] 
         self.index = 0
@@ -231,25 +230,8 @@ class MyApp(object):
             self.answerGUI.pack(side = "top")
  
     #----------------------------------------------------------------------
-    def hide(self):
-        """"""
-        self.root.withdraw()
- 
-    #----------------------------------------------------------------------
-    
-    def say_hi(self):
-        print("Welcome to the flash card program!")
-        say_hi.pack()
-    
-    # def answerGUI(self, answerString):
-   #      print ("answerGUI")
     
     def openFrame(self):
-        # self.hide()
-#         otherFrame = Tk.Toplevel()
-#         otherFrame.geometry("500x500")
-#         otherFrame.title("Answer")
-        
         if self.answerGUI["fg"] == 'white':
             self.answerGUI["fg"] = 'black'
         elif self.answerGUI["fg"] == 'black':
@@ -260,24 +242,7 @@ class MyApp(object):
         elif self.questionGUI["fg"] == 'white':
             self.questionGUI["fg"] = 'black'
         
-    def previousCards(self):
-        previousCard.pack()
-        
-    def menu(self):
-        menu.pack()
-        
-    def quit(self):
-        quit.pack()
-        
     #----------------------------------------------------------------------
-    def onCloseOtherFrame(self, otherFrame):
-        otherFrame.destroy()
-        self.show()
- 
-    #----------------------------------------------------------------------
-    def show(self):
-        self.root.update()
-        self.root.deiconify()
 
 #----------------------------------------------------------------------
 if __name__ == "__main__":
