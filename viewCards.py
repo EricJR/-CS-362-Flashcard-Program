@@ -62,23 +62,29 @@ class MyApp(object):
         menu = Tk.Button(self.frame, text="Back to Menu")
         menu.pack(side = "bottom")
         
-            
-
     def incrementIndex(self):
         self.index += 1
-        self.questionGUI["text"] = self.questionString[self.index] + "\n"
-        self.questionGUI.pack(side = "top")
+        
+        if (self.index == len(self.questionString)):
+            self.index = len(self.questionString) - 1
+        else:
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
 
-        self.answerGUI["text"] = self.answerString[self.index] + "\n"
-        self.answerGUI.pack(side = "top")
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
         
     def decrementIndex(self):
-        self.index -= 1
-        self.questionGUI["text"] = self.questionString[self.index] + "\n"
-        self.questionGUI.pack(side = "top")
+        
+        if (self.index == 0):
+            self.index = 0
+        else: 
+            self.index -= 1
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
 
-        self.answerGUI["text"] = self.answerString[self.index] + "\n"
-        self.answerGUI.pack(side = "top")
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
  
     #----------------------------------------------------------------------
     def hide(self):
