@@ -78,36 +78,13 @@ class FlashcardController:
                 #    print("Added card:\n",card)
                 
     def __str__(self):
-        #to_print = ""
-        #for deck in self._decks:
-        #    to_print += str(deck) + ", "
-         
-        #return ("%s" % (to_print[:-2]))
-        
         # Convert the Deck objects in the decks[] list to str, and modify the string
         # with a comma between each object for easier reading.
         return (", ".join(map(str, self._decks)))
 
-
-
-
-
-
-
-
-
 class FileSystemStorage:
     def __init__(self):
         self.file_name = "flashcards_file.txt"
-
-        #filepath = os.path.join("/library",self.file_name)
-
-        #subdir = os.path.join("/library/" + self.file_name)
-
-        #try:
-        #    os.mkdir(subdir)
-        #except:
-        #    print("failed")
 
         # Try to open the file. If it does not exist (first user run), it will be created. Otherwise, it confirms success.
         with open(self.file_name,"a+") as f:
@@ -196,13 +173,7 @@ class MyApp(object):
                 self.answerString.append(card.get_definition())
         
         print("Length qstring = ", len(self.questionString))
-        
-        # self.questionString = "What color is the sky?", "what is 3+5?", "What is blue?", "What are pants?"
- #        #print (questionString)
- #
- #        self.answerString = "Blue", "8", "A Color", "For your legs"
- #        #print (answerString)
-        
+
         hi_there = Tk.Message(self.frame)
         hi_there["text"] = "\nNow Viewing Deck!\n"
         hi_there.pack(side = "top")
@@ -217,18 +188,9 @@ class MyApp(object):
         self.answerGUI["text"] = self.answerString[self.index] + "\n"
         self.answerGUI.pack(side = "top")
 
-
-
-        # answer = Tk.Button(self.frame, text="Show Answer", command=self.openFrame(answerGUI))
-    #         answer.pack(side = "top")
-
-
         answer = Tk.Button(self.frame, text="Flip")
         answer["command"] = lambda: self.openFrame()
         answer.pack(side = "top")
-
-        # if answer:
-    #             self.openFrame(answerGUI)
 
         previousCard = Tk.Button(self.frame, text="Previous Card")
         previousCard["command"] = lambda : self.decrementIndex()
@@ -237,9 +199,7 @@ class MyApp(object):
         nextCard = Tk.Button(self.frame, text="Next Card")
         nextCard["command"] = lambda : self.incrementIndex()
         nextCard.pack(side = "right")
-        
-        
-
+     
         quit = Tk.Button(self.frame, text="Quit Program", command=root.destroy)
         quit.pack(side = "bottom")
 
@@ -299,20 +259,6 @@ class MyApp(object):
             self.questionGUI["fg"] = 'white'
         elif self.questionGUI["fg"] == 'white':
             self.questionGUI["fg"] = 'black'
-        
-        #answerGUI["fg"] = 'black'
-        # answerGUI.pack()
-#         questionGUI.pack()
-        
-        # print (questionString)
-        
-        # answerGUI = Tk.Message(self.frame)
-#         answerGUI["fg"] = 'white'
-#         answerGUI["text"] = "\nAnswer:\n" + answerString
-#         answerGUI.pack(side = "top")
-        
-        # answer = Tk.Button(otherFrame, text="Close", command=handler)
-#         answer.pack(side = "bottom")
         
     def previousCards(self):
         previousCard.pack()
