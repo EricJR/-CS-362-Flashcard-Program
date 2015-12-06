@@ -22,29 +22,36 @@ class MyApp(object):
         hi_there["text"] = "\nNow Viewing Deck!\n"
         hi_there.pack(side = "top")
         
-        question = Tk.Message(self.frame)
-        question["text"] = "Question: " + questionString
-        question.pack(side = "top")
+        # question = Tk.Message(self.frame)
+    #     question["text"] = "Question: " + questionString
+    #     question.pack(side = "top")
         
-        text = Tk.Message(self.frame)
-        text["text"] = "\nAnswer:\n"
-        text.pack(side = "top")
+        # text = Tk.Message(self.frame)
+#         text["text"] = "\nAnswer:\n"
+#         text.pack(side = "top")
         
-        lol = Tk.Message(self.frame)
-        lol["fg"] = 'white'  
-        lol["text"] = answerString + "\n"
-        lol.pack(side = "top")
+        questionGUI = Tk.Message(self.frame)
+        questionGUI["fg"] = 'black'
+        questionGUI["text"] = questionString + "\n"
+        questionGUI.pack(side = "top")
         
-        # answer = Tk.Button(self.frame, text="Show Answer", command=self.openFrame(lol))
+        answerGUI = Tk.Message(self.frame)
+        answerGUI["fg"] = 'white'  
+        answerGUI["text"] = answerString + "\n"
+        answerGUI.pack(side = "top")
+        
+        
+        
+        # answer = Tk.Button(self.frame, text="Show Answer", command=self.openFrame(answerGUI))
 #         answer.pack(side = "top")
 
 
         answer = Tk.Button(self.frame, text="Flip")
-        answer["command"] = lambda: self.openFrame(lol)
+        answer["command"] = lambda: self.openFrame(answerGUI, questionGUI)
         answer.pack(side = "top")
 
         # if answer:
-#             self.openFrame(lol)
+#             self.openFrame(answerGUI)
         
         previousCard = Tk.Button(self.frame, text="Previous Card")
         previousCard.pack(side = "left")
@@ -59,7 +66,7 @@ class MyApp(object):
         menu.pack(side = "bottom")
         
         #answer.pack()
-        #lol.pack()
+        #answerGUI.pack()
         #previousCard.pack()
         #nextCard.pack()
         #menu.pack()
@@ -77,24 +84,35 @@ class MyApp(object):
         print("Welcome to the flash card program!")
         say_hi.pack()
     
-    # def lol(self, answerString):
-   #      print ("lol")
+    # def answerGUI(self, answerString):
+   #      print ("answerGUI")
     
-    def openFrame(self, lol):
+    def openFrame(self, answerGUI, questionGUI):
         # self.hide()
 #         otherFrame = Tk.Toplevel()
 #         otherFrame.geometry("500x500")
 #         otherFrame.title("Answer")
         
-        lol["fg"] = 'black'
-        lol.pack()
+        if answerGUI["fg"] == 'white':
+            answerGUI["fg"] = 'black'
+        elif answerGUI["fg"] == 'black':
+            answerGUI["fg"] = 'white'
+            
+        if questionGUI["fg"] == 'black':
+            questionGUI["fg"] = 'white'
+        elif questionGUI["fg"] == 'white':
+            questionGUI["fg"] = 'black'
+        
+        #answerGUI["fg"] = 'black'
+        # answerGUI.pack()
+#         questionGUI.pack()
         
         # print (questionString)
         
-        # lol = Tk.Message(self.frame)
-#         lol["fg"] = 'white'
-#         lol["text"] = "\nAnswer:\n" + answerString
-#         lol.pack(side = "top")
+        # answerGUI = Tk.Message(self.frame)
+#         answerGUI["fg"] = 'white'
+#         answerGUI["text"] = "\nAnswer:\n" + answerString
+#         answerGUI.pack(side = "top")
         
         # answer = Tk.Button(otherFrame, text="Close", command=handler)
 #         answer.pack(side = "bottom")
