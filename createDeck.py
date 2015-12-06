@@ -86,6 +86,10 @@ class createDeck(tk.Frame):
         button = Button(self, text="Save Deck", command=self.printContents)
         button.pack()
 
+        #Exit button
+        button2 = Button(self, text="Exit", command=self.quit)
+        button2.pack()
+
         self.status = Label(self,text="Create your Deck",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
