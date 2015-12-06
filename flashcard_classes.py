@@ -100,12 +100,12 @@ class FileSystemStorage:
 
         #filepath = os.path.join("/library",self.file_name)
 
-        subdir = os.path.join("/library/" + self.file_name)
+        #subdir = os.path.join("/library/" + self.file_name)
 
-        try:
-            os.mkdir(subdir)
-        except:
-            print("failed")
+        #try:
+        #    os.mkdir(subdir)
+        #except:
+        #    print("failed")
 
         # Try to open the file. If it does not exist (first user run), it will be created. Otherwise, it confirms success.
         with open(self.file_name,"w+") as f:
@@ -149,8 +149,8 @@ class FileSystemStorage:
         return ctrler
 
     def write_to_file(self, ctrler):
-
-        outfile = os.path.abspath("library/" + self.file_name)
+        outfile = self.file_name
+        #outfile = os.path.abspath("library/" + self.file_name)
       
         with open(outfile, "w") as f:
             for deck in ctrler.get_decks():
