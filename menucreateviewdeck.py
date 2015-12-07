@@ -22,6 +22,7 @@ deckName = ""
 
 mainFileSys.read_from_file(mainController)
 
+#Helps "switch" windows by hiding windows and raising desired window
 class switchWindow(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -40,7 +41,7 @@ class switchWindow(tk.Tk):
 
         self.frames = {}
 
-        for F in (Application,createDeck,addCards):
+        for F in (Application,createDeck,addCards,viewCards):
 
             frame = F(container, self)
 
@@ -52,17 +53,21 @@ class switchWindow(tk.Tk):
 
         self.show_frame(Application)
 
+    #Used to show the desired frame.  Will name the frame based on the class
     def show_frame(self, c):
         '''Show a frame for the given class'''
         if c == Application:
             tk.Tk.wm_title(self,"Team Syntax Error's Flash Card Program")
         elif c == createDeck:
             tk.Tk.wm_title(self,"Create Deck")
+        elif c == viewCards:
+            tk.Tk.wm_title(self,"View Cards")
         else:
             tk.Tk.wm_title(self,"Add Cards")
         frame = self.frames[c]
         frame.tkraise()
 
+    #Quit the program
     def quitProgram(self):
         tk.Tk.destroy(self)
 
@@ -129,7 +134,7 @@ class Application(tk.Frame):
     def create(self):
         self.controller.show_frame(createDeck)
     def view(self):
-        print("Viewing Deck")
+        self.controller.show_frame(viewCards)
     def edit(self):
         print("Select a Deck")
     def delete(self):
@@ -138,13 +143,13 @@ class Application(tk.Frame):
     def quit(self):
         self.controller.quitProgram()
 
-# Gets deck name and deck description from user and creates the deck.
-# Stores the deck information into a text file
+#User will enter Question and Answer. After user presses exit, the cards along with the deck name and description will be saved to the text file
+#Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
+#Format of newly created card in textfile will be Question~~Answer
 class createDeck(tk.Frame):
     def __init__(self, master,controller):
         tk.Frame.__init__(self, master)
         self.controller = controller
-        #self.pack()
         self.createWidgets()
 
     def goBack(self):
@@ -177,6 +182,7 @@ class createDeck(tk.Frame):
         button3 = Button(self, text="Exit", command=self.quit)
         button3.pack()
 
+        #Status Bar
         self.status = Label(self,text="Create your Deck",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
@@ -184,6 +190,8 @@ class createDeck(tk.Frame):
     def saveContents(self):
         global mainController
         global deckName
+
+        #delete previous status
         self.status.destroy()
 
         if len(self.deckName.get()) == 0 and len(self.deckDescription.get()) == 0:
@@ -203,9 +211,13 @@ class createDeck(tk.Frame):
             mainController.new_deck(self.deckName.get(),self.deckDescription.get())
             tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.deckName.get() + "!")
             self.controller.show_frame(addCards)
+            #Delete contents in entries
             self.e1.delete(0,END)
             self.e2.delete(0,END)
 
+#User will enter Question and Answer. After user presses exit, the cards along with the deck name and description will be saved to the text file
+# Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
+# Format of newly created card in textfile will be Question~~Answer
 class addCards(tk.Frame):
     def __init__(self, master,controller):
         tk.Frame.__init__(self, master)
@@ -243,6 +255,7 @@ class addCards(tk.Frame):
         button3 = Button(self, text="Exit", command=self.quit)
         button3.pack()
 
+        #Status Bar
         self.status = Label(self,text="Add Cards to your Deck",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
@@ -252,6 +265,7 @@ class addCards(tk.Frame):
         global deckName
         global mainFileSys
 
+        #Erase old status
         self.status.destroy()
 
         if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
@@ -270,15 +284,123 @@ class addCards(tk.Frame):
             for deck in mainController.get_decks():
                 if deck.get_name() == deckName:
                     deck.add_card(self.cardFront.get(), self.backCard.get())
-
+            #Delete previous entries so user can add more cards if they want
             self.e1.delete(0,END)
             self.e2.delete(0,END)
+
             self.status = Label(self,text="Card Added! Successfully added FlashCard your Deck!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
 
+    #Quit Program will save the contents.
     def quit(self):
         mainFileSys.write_to_file(mainController)
         self.controller.quitProgram()
+
+#View Flashcards
+class viewCards(tk.Frame):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, master,controller):
+        tk.Frame.__init__(self, master)
+        global mainController
+        global mainFileSys
+        self.controller = controller
+        #self.root = parent
+        #self.root.title("Main frame")
+        #self.frame = Tk.Frame(parent)
+        #self.frame.pack()
+
+        self.questionString = []
+        self.answerString = []
+        self.index = 0
+        debug = True
+
+        # Testing the file system
+        mainFileSys.read_from_file(mainController)
+
+        decks = mainController.get_decks()
+        for deck in decks:
+            cards = deck.get_cards()
+            for card in cards:
+                self.questionString.append(card.get_term())
+                self.answerString.append(card.get_definition())
+
+        print("Length qstring = ", len(self.questionString))
+
+        hi_there = tk.Message(self)
+        hi_there["text"] = "\nNow Viewing Deck!\n"
+        hi_there["width"] = 1000
+        hi_there.pack(side = "top")
+
+        self.questionGUI = tk.Message(self)
+        self.questionGUI["fg"] = 'black'
+        self.questionGUI["width"] = 600
+        self.questionGUI["text"] = self.questionString[self.index] + "\n"
+        self.questionGUI.pack(side = "top")
+
+        self.answerGUI = tk.Message(self)
+        self.answerGUI["fg"] = 'white'
+        self.answerGUI["width"] = 600
+        self.answerGUI["text"] = self.answerString[self.index] + "\n"
+        self.answerGUI.pack(side = "top")
+
+        answer = tk.Button(self, text="Flip")
+        answer["command"] = lambda: self.openFrame()
+        answer.pack(side = "top")
+
+        previousCard = tk.Button(self, text="Previous Card")
+        previousCard["command"] = lambda : self.decrementIndex()
+        previousCard.pack(side = "left")
+
+        nextCard = tk.Button(self, text="Next Card")
+        nextCard["command"] = lambda : self.incrementIndex()
+        nextCard.pack(side = "right")
+
+        quit = tk.Button(self, text="Quit Program", command=self.quit)
+        quit.pack(side = "bottom")
+
+        menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+        menu.pack(side = "bottom")
+
+    def incrementIndex(self):
+        self.index += 1
+
+        if (self.index == len(self.questionString)):
+            self.index = len(self.questionString) - 1
+        else:
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
+
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
+
+    def decrementIndex(self):
+
+        if (self.index == 0):
+            self.index = 0
+        else:
+            self.index -= 1
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
+
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
+
+    def goBack(self):
+            self.controller.show_frame(Application)
+    #----------------------------------------------------------------------
+
+    def openFrame(self):
+        if self.answerGUI["fg"] == 'white':
+            self.answerGUI["fg"] = 'black'
+        elif self.answerGUI["fg"] == 'black':
+            self.answerGUI["fg"] = 'white'
+
+        if self.questionGUI["fg"] == 'black':
+            self.questionGUI["fg"] = 'white'
+        elif self.questionGUI["fg"] == 'white':
+            self.questionGUI["fg"] = 'black'
+
 
 def main():
     create = switchWindow()
