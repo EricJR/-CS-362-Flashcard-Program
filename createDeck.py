@@ -4,6 +4,8 @@
 # Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
 # Format of newly created card in textfile will be FrontCardInfo~~BackCardInfo
 
+
+
 import os
 import sys
 import os.path
@@ -11,9 +13,13 @@ import tkinter as tk
 import tkinter
 from tkinter import *
 import tkinter.messagebox
+from flashcard_classes import *
 
-# Flash Cards array:
-flashCards = []
+mainController = FlashcardController()
+mainFileSys = FileSystemStorage()
+deckName = ""
+
+mainFileSys.read_from_file(mainController)
 
 class switchWindow(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -70,20 +76,20 @@ class createDeck(tk.Frame):
     def createWidgets(self):
 
         # Variable for user's preferred deck name and deck description
-        self.usertext = StringVar()
-        self.usertext2 = StringVar()
+        self.deckName = StringVar()
+        self.deckDescription = StringVar()
 
         # Labels for "Enter Deck Name" and "Enter Deck Description"
         Label(self, text="Enter Deck Name").pack()
-        self.e1 = tk.Entry(self, textvariable=self.usertext)
+        self.e1 = tk.Entry(self, textvariable=self.deckName)
         self.e1.pack()
 
         Label(self, text="Enter Deck Description").pack()
-        self.e2 = tk.Entry(self, textvariable=self.usertext2)
+        self.e2 = tk.Entry(self, textvariable=self.deckDescription)
         self.e2.pack()
 
         # User needs to click save deck
-        button = Button(self, text="Save Deck", command=self.printContents)
+        button = Button(self, text="Save Deck", command=self.saveContents)
         button.pack()
 
         #Exit button
@@ -93,38 +99,35 @@ class createDeck(tk.Frame):
         self.status = Label(self,text="Create your Deck",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
-    # Print deck to textfile. Display an OK messagebox if successful. Will check if user actually entered deck name and description before writing to file.
-    def printContents(self):
-
+    # Print deck to textfile. Display an OK messagebox if successful. Will check if user actually entered deck name and description before saving to controller.
+    def saveContents(self):
+        global mainController
+        global deckName
         self.status.destroy()
 
-        if len(self.usertext.get()) == 0 and len(self.usertext2.get()) == 0:
+        if len(self.deckName.get()) == 0 and len(self.deckDescription.get()) == 0:
             #tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name and Description!")
             self.status = Label(self,text="Error: You need to enter a Deck Name and Description!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
-        elif len(self.usertext.get()) == 0:
+        elif len(self.deckName.get()) == 0:
             #tkinter.messagebox.showinfo("Error", "You need to enter a Deck Name!")
             self.status = Label(self,text="Error: You need to enter a Deck Name!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
-        elif len(self.usertext2.get()) == 0:
+        elif len(self.deckDescription.get()) == 0:
             #tkinter.messagebox.showinfo("Error", "You need to enter a Deck Description!")
             self.status = Label(self,text="Error: You need to enter a Deck Description!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         else:
-            text_file = open("Flashcards.txt", "a")
-            text_file.write("@@@" + self.usertext.get() + "~~" + self.usertext2.get() + "\n")
-            text_file.close()
-            # print("Writing to file...")
-            tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.usertext.get() + "!")
+            deckName = self.deckName.get()
+            mainController.new_deck(self.deckName.get(),self.deckDescription.get())
+            tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.deckName.get() + "!")
             self.controller.show_frame(addCards)
             self.e1.delete(0,END)
             self.e2.delete(0,END)
 
-
 class addCards(tk.Frame):
     def __init__(self, master,controller):
         tk.Frame.__init__(self, master)
-        #self.pack()
         self.createWidgets()
         self.controller = controller
 
@@ -146,7 +149,7 @@ class addCards(tk.Frame):
         self.e2.pack()
 
         # User needs to click save deck
-        button = Button(self, text="Save Card", command=self.printContents)
+        button = Button(self, text="Save Card", command=self.saveContents)
         button.pack()
 
         button2 = Button(self, text="Go Back to Create Deck", command = self.goBack)
@@ -160,7 +163,10 @@ class addCards(tk.Frame):
         self.status.pack(side=BOTTOM,fill=X)
 
     #Checks if user entered both front and back information. If they did it will write question and answer to text file.
-    def printContents(self):
+    def saveContents(self):
+        global mainController
+        global deckName
+        global mainFileSys
 
         self.status.destroy()
 
@@ -177,18 +183,17 @@ class addCards(tk.Frame):
             self.status = Label(self,text="Error: You need to enter an Answer",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         else:
-            text_file = open("Flashcards.txt", "a")
-            text_file.write(self.cardFront.get() + "~~" + self.backCard.get() + "\n")
-            text_file.close()
-            #Delete the Contents of the 2 labels
+            for deck in mainController.get_decks():
+                if deck.get_name() == deckName:
+                    deck.add_card(self.cardFront.get(), self.backCard.get())
+
             self.e1.delete(0,END)
             self.e2.delete(0,END)
-            #print("Writing to file...")
-            #tkinter.messagebox.showinfo("Card Added!", "Successfully added FlashCard to your deck.")
             self.status = Label(self,text="Card Added! Successfully added FlashCard your Deck!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
 
     def quit(self):
+        mainFileSys.write_to_file(mainController)
         self.controller.quitProgram()
 
 def main():
