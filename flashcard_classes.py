@@ -40,6 +40,9 @@ class Deck:
     def add_card(self, term, definition):
         new_card = Flashcard(term, definition)
         self._cards.append(new_card)
+        
+    def remove_all_cards(self):
+        del self._cards[:]        
 
     def __str__(self):
         return ("%s" % (self._name))
@@ -99,31 +102,32 @@ class FileSystemStorage:
         file_lines = []
         RE_lines = []
         
-        with open(self.file_name, "r") as ifh:
-            for line in ifh:
-                file_lines.append(line)
-                
-        pattern = re.compile(r"@@@|~~")
-        
-        for line in file_lines:
-            RE_lines.append(pattern.split(line))
+        if os.stat(self.file_name).st_size > 0: # file has content
+            with open(self.file_name, "r") as ifh:
+                for line in ifh:
+                    file_lines.append(line)
+                    
+            pattern = re.compile(r"@@@|~~")
             
-        for line in RE_lines:
-            if line[0] == '':
-                try:
-                    deck_name = line[1]
-                    deck_desc = line[2].replace('\n','')
-                    ctrler.new_deck(deck_name, deck_desc)
-                except:
+            for line in file_lines:
+                RE_lines.append(pattern.split(line))
+                
+            for line in RE_lines:
+                if line[0] == '':
+                    try:
+                        deck_name = line[1]
+                        deck_desc = line[2].replace('\n','')
+                        ctrler.new_deck(deck_name, deck_desc)
+                    except:
+                        card_term = line[0]
+                        card_def = line[1].replace('\n','')
+                        ctrler.get_deck(deck_name).add_card(card_term, card_def)
+                else:
                     card_term = line[0]
                     card_def = line[1].replace('\n','')
                     ctrler.get_deck(deck_name).add_card(card_term, card_def)
-                    #print ("\tCard term: {}\n\tCard definition: {}".format(card_term, card_def))
-            else:
-                card_term = line[0]
-                card_def = line[1].replace('\n','')
-                ctrler.get_deck(deck_name).add_card(card_term, card_def)
-                #print ("\tCard term: {}\n\tCard definition: {}".format(card_term, card_def))
+        else: # file is empty, so we don't read from it
+            pass
 
         return ctrler
 
