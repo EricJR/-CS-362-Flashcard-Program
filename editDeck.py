@@ -1,7 +1,18 @@
 #!/Library/Frameworks/Python.framework/Versions/3.4/bin/python3
-import tkinter as tk  # gives tk namespace
 
-#Edit Deck 
+# TODO: The selected deck is currently hard coded to the deck w/ name "Test Deck". We need to make
+# a button for each deck and select the deck that the user clicks. Also, this needs to be put into a class
+# and made to be modular.
+
+import tkinter as tk  # gives tk namespace
+from flashcard_classes import *
+
+
+ 
+controller = FlashcardController()
+file_sys = FileSystemStorage()
+
+file_sys.read_from_file(controller)
 
 def add_item():
     listbox1.insert(tk.END, enter1.get())
@@ -71,32 +82,27 @@ def set_list2(event):
 #         listbox1.insert(tk.END, item)
 
 def save_list():
+    global controller
+    global file_sys
     # get a list of listbox lines
     temp_list1 = list(listbox1.get(0, tk.END))
     temp_list2 = list(listbox2.get(0, tk.END))
-    # add a trailing newline char to each line
-    temp_list1 = [flash for flash in temp_list1]
-    temp_list2 = [flash + '\n' for flash in temp_list2]
-    final_list = []
-    for i in range(len(temp_list1)):
-        item_to_append = temp_list1[i]+ "~" + temp_list2[i]
-        final_list.append(item_to_append)
-    
-    # give the file a different name
-    fout = open("flashCards.txt", "w")
-    fout.writelines(final_list)
-    fout.close()
 
-# read the data file into a list
-fin = open("flashCards.txt", "r")
-flash_list = fin.readlines()
-fin.close()
+    for deck in controller.get_decks():
+        #TODO: needs to be updated to the name of the deck clicked on by the user, rather than this hard coded one
+        if deck.get_name() == "Test Deck":
+            deck.remove_all_cards()
+            for card in deck.get_cards():
+                print("\tTerm: ",card.get_term(),"\n\tDef: ",card.get_definition())
 
-# strip the trailing newline char
-flash_list = [flash.rstrip() for flash in flash_list]
- 
+            for i in range(len(temp_list1)):
+                deck.add_card(temp_list1[i], temp_list2[i])
+            break
+
+    file_sys.write_to_file(controller)
+
 root = tk.Tk()
-root.geometry("875x875")
+root.geometry("1000x1000")
 root.title("Edit Cards")
 
 #root.text("lol", row=0, column=0)
@@ -166,13 +172,14 @@ button6.grid(row=3, column=2, sticky=tk.E)
 
 
 
-# load the listbox with data
-for item in flash_list:
-    listbox1.insert(tk.END, item)
-    
-# load the listbox with data
-for item in flash_list:
-    listbox2.insert(tk.END, item)
+# load the listboxs with data
+
+for deck in controller.get_decks():
+    if deck.get_name() == "Test Deck":
+        for card in deck.get_cards():
+            listbox1.insert(tk.END, card.get_term())
+            listbox2.insert(tk.END, card.get_definition())
+
  
 # left mouse click on a list item to display selection
 listbox1.bind('<ButtonRelease-1>', get_list)
@@ -180,3 +187,4 @@ listbox1.bind('<ButtonRelease-1>', get_list)
 listbox2.bind('<ButtonRelease-1>', get_list)
 
 root.mainloop()
+ 
