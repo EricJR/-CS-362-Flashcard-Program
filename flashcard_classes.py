@@ -83,6 +83,12 @@ class FlashcardController:
             if deck.get_name() == deck_name_to_delete:
                 self._decks.remove(deck)
                 break
+            
+    def print_all_content(self):
+        for deck in self._decks:
+            print("Deck Name: ",deck.get_name(), "\nDeck Description: ", deck.get_description())
+            for card in deck.get_cards():
+                print("\tTerm:",card.get_term(), "\n\tDef:", card.get_definition())
                 
     def __str__(self):
         return (", ".join(map(str, self._decks)))
