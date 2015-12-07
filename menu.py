@@ -55,16 +55,16 @@ flashCards = []
 #     for item in lis: list.insert(END, item)
 #     file.close()
 
-def insert_window():
-    #root = tk()
-    inwin = Toplevel()
-    inwin.title("Insert")
-    ne = Entry(inwin, textvariable = Question) 
-    pe = Entry(inwin, textvariable = Answer) 
-    button = Button(inwin, text = "Insert", command = insert) 
-    ne.pack() 
-    pe.pack() 
-    button.pack()
+#def insert_window():
+#    root = tk()
+#    inwin = Toplevel()
+#    inwin.title("Insert")
+#    ne = Entry(inwin, textvariable = Question) 
+#    pe = Entry(inwin, textvariable = Answer) 
+#    button = Button(inwin, text = "Insert", command = insert) 
+#    ne.pack() 
+#    pe.pack() 
+#    button.pack()
     
 #the insert button
 #ibutton = Button(root, text = "Launch Insert Window", command = insert_window)
