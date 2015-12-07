@@ -29,19 +29,15 @@ class MyApp(object):
         hi_there["text"] = "\nWhich Deck to Delete?\n"
         hi_there["width"] = 1000
         hi_there.pack(side = "top")
-        
-        self.deck_names = []
-        self.index = 0
+
         
         decks = self.controller.get_decks()
         for deck in decks:
-            self.deck_names.append(deck.get_name())
             deck_name = deck.get_name()
             self.deck = Tk.Button(self.frame)
             self.deck["text"] = deck_name
-            self.deck["command"] = lambda: self.delete(self.deck_names[self.index])
+            self.deck["command"] = lambda thisDeckName = deck_name, thisDeck = deck: self.delete(thisDeckName, thisDeck)
             self.deck.pack(side="top")
-            self.index += 1
      
         quit = Tk.Button(self.frame, text="Quit Program", command=root.destroy)
         quit.pack(side = "bottom")
@@ -50,16 +46,20 @@ class MyApp(object):
         menu.pack(side = "bottom")
         
         
-    def delete(self, deck_name):
-        self.index -= 3
-        print(self.deck_names[self.index]) 
+    def delete(self, deck_name, deck):
+        print(deck_name)
         dialog_title = 'Deletion Confirmation'
         dialog_text = 'Are you sure you want to delete this deck?'
         answer = messagebox.askquestion(dialog_title, dialog_text)
         
         if answer == 'yes':
-            self.controller.delete_deck(self.deck_names[self.index])
+            self.controller.delete_deck(deck_name)
             self.file_sys.write_to_file(self.controller)
+            
+            success = Tk.Message(self.frame)
+            success["text"] = "\nSuccessfully deleted: '" + deck_name + "'!\n\n\n"
+            success["width"] = 1000
+            success.pack(side = "bottom")
         else:
             return
 
