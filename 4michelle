@@ -1,0 +1,67 @@
+import tkinter as Tk
+import re
+import sys
+import os
+from flashcard_classes import *
+
+class MyApp(object):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, parent):
+        """Constructor"""
+        
+        self.root = parent
+        self.root.title("Delete Deck")
+        self.frame = Tk.Frame(parent)
+        self.frame.pack()
+        
+        self.questionString = []
+        self.answerString = [] 
+        self.index = 0
+        
+        controller = FlashcardController()
+        file_sys = FileSystemStorage()
+        debug = True
+    
+        # Testing the file system
+        file_sys.read_from_file(controller)
+        
+        
+        # for deck in decks:
+ #            cards = deck.get_cards()
+ #            for card in cards:
+ #                self.questionString.append(card.get_term())
+ #                self.answerString.append(card.get_definition())
+        
+        print("Length qstring = ", len(self.questionString))
+
+        hi_there = Tk.Message(self.frame)
+        hi_there["text"] = "\nWhich deck to delete?\n"
+        hi_there["width"] = 1000
+        hi_there.pack(side = "top")
+
+        # self.deckDelete = Tk.Message(self.frame)
+ #        self.deckDelete["width"] = 600
+ #        self.deckDelete["text"] = self.questionString[self.index] + "\n"
+ #        self.deckDelete.pack(side = "top")
+        
+        
+        ################@@@@@@@@@@@
+        decks = controller.get_decks()
+        deck_name_list = []
+        for deck in decks:
+            deck_name_list.append(deck.get_name())
+
+        for item in deck_name_list:
+            #item = Tk.Button(self, text=item)
+            print (item)
+            button = Tk.Button(root, text=k, width=5, relief='raised', command=onclick(k), state=Tk.DISABLED)
+            button.grid(row=i, column=0)
+        
+        ##############@@@@@@@@@@@
+
+if __name__ == "__main__":
+    root = Tk.Tk()
+    root.geometry("400x400")
+    app = MyApp(root)
+    root.mainloop()
