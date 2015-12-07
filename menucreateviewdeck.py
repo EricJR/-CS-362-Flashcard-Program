@@ -291,7 +291,7 @@ class addCards(tk.Frame):
             self.e1.delete(0,END)
             self.e2.delete(0,END)
 
-            self.status = Label(self,text="Card Added! Successfully added FlashCard your Deck!",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Flashcard successfully added to your Deck!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
 
     #Quit Program will save the contents.
