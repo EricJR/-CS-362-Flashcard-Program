@@ -5,10 +5,8 @@ import os
 from tkinter import messagebox
 from flashcard_classes import *
 
-########################################################################
 class MyApp(object):
     """"""
-    #----------------------------------------------------------------------
     def __init__(self, parent):
         """Constructor"""
         
@@ -26,13 +24,6 @@ class MyApp(object):
     
         # Testing the file system
         self.file_sys.read_from_file(self.controller)
-        
-        # decks = controller.get_decks()
-#         for deck in decks:
-#             cards = deck.get_cards()
-#             for card in cards:
-#                 self.questionString.append(card.get_term())
-#                 self.answerString.append(card.get_definition())
 
         hi_there = Tk.Message(self.frame)
         hi_there["text"] = "\nWhich Deck to Delete?\n"
@@ -45,12 +36,12 @@ class MyApp(object):
         decks = self.controller.get_decks()
         for deck in decks:
             self.deck_names.append(deck.get_name())
+            deck_name = deck.get_name()
             self.deck = Tk.Button(self.frame)
-            self.deck["text"] = self.deck_name
+            self.deck["text"] = deck_name
             self.deck["command"] = lambda: self.delete(self.deck_names[self.index])
             self.deck.pack(side="top")
             self.index += 1
-            
      
         quit = Tk.Button(self.frame, text="Quit Program", command=root.destroy)
         quit.pack(side = "bottom")
@@ -69,14 +60,8 @@ class MyApp(object):
         if answer == 'yes':
             self.controller.delete_deck(self.deck_names[self.index])
             self.file_sys.write_to_file(self.controller)
-            
         else:
             return
-        
-        
-        
-        
-#----------------------------------------------------------------------
 
 #----------------------------------------------------------------------
 if __name__ == "__main__":
