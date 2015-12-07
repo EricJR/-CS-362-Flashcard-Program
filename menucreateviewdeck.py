@@ -20,7 +20,7 @@ mainController = FlashcardController()
 mainFileSys = FileSystemStorage()
 deckName = ""
 
-mainFileSys.read_from_file(mainController)
+#mainFileSys.read_from_file(mainController)
 
 #Helps "switch" windows by hiding windows and raising desired window
 class switchWindow(tk.Tk):
