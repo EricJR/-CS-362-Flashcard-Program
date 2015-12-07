@@ -45,9 +45,8 @@ class MyApp(object):
         decks = self.controller.get_decks()
         for deck in decks:
             self.deck_names.append(deck.get_name())
-            deck_name = deck.get_name()
             self.deck = Tk.Button(self.frame)
-            self.deck["text"] = deck_name
+            self.deck["text"] = self.deck_name
             self.deck["command"] = lambda: self.delete(self.deck_names[self.index])
             self.deck.pack(side="top")
             self.index += 1
