@@ -1,11 +1,3 @@
-# User enters deck name and deck description. They will then click on Save deck to save the deck information to a text file
-# User enters front card information and back card information and click save card to save card to the text file
-
-# Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
-# Format of newly created card in textfile will be FrontCardInfo~~BackCardInfo
-
-
-
 import os
 import sys
 import os.path
@@ -33,17 +25,17 @@ class switchWindow(tk.Tk):
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
-        container = tk.Frame(self)
-        container.pack(side="top", fill="both", expand=True)
+        self.container = tk.Frame(self)
+        self.container.pack(side="top", fill="both", expand=True)
 
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
 
         for F in (Application,createDeck,addCards,viewCards):
 
-            frame = F(container, self)
+            frame = F(self.container, self)
 
             self.frames[F] = frame
         # put all of the pages in the same location;
@@ -62,6 +54,15 @@ class switchWindow(tk.Tk):
             tk.Tk.wm_title(self,"Create Deck")
         elif c == viewCards:
             tk.Tk.wm_title(self,"View Cards")
+            for F in (Application,createDeck,addCards,viewCards):
+
+                frame = F(self.container, self)
+
+                self.frames[F] = frame
+        # put all of the pages in the same location;
+        # the one on the top of the stacking order
+        # will be the one that is visible.
+                frame.grid(row=0, column=0, sticky="nsew")
         else:
             tk.Tk.wm_title(self,"Add Cards")
         frame = self.frames[c]
@@ -70,6 +71,7 @@ class switchWindow(tk.Tk):
     #Quit the program
     def quitProgram(self):
         tk.Tk.destroy(self)
+
 
 class Application(tk.Frame):
     def __init__(self, master,controller):
@@ -215,6 +217,7 @@ class createDeck(tk.Frame):
             self.e1.delete(0,END)
             self.e2.delete(0,END)
 
+
 #User will enter Question and Answer. After user presses exit, the cards along with the deck name and description will be saved to the text file
 # Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
 # Format of newly created card in textfile will be Question~~Answer
@@ -301,10 +304,13 @@ class viewCards(tk.Frame):
     """"""
     #----------------------------------------------------------------------
     def __init__(self, master,controller):
-        tk.Frame.__init__(self, master)
+        item = tk.Frame.__init__(self, master)
+        self.controller = controller
+        self.createWidgets()
+
+    def createWidgets(self):
         global mainController
         global mainFileSys
-        self.controller = controller
         #self.root = parent
         #self.root.title("Main frame")
         #self.frame = Tk.Frame(parent)
@@ -313,7 +319,7 @@ class viewCards(tk.Frame):
         self.questionString = []
         self.answerString = []
         self.index = 0
-        debug = True
+        #debug = True
 
         # Testing the file system
         mainFileSys.read_from_file(mainController)
@@ -327,40 +333,50 @@ class viewCards(tk.Frame):
 
         print("Length qstring = ", len(self.questionString))
 
-        hi_there = tk.Message(self)
-        hi_there["text"] = "\nNow Viewing Deck!\n"
-        hi_there["width"] = 1000
-        hi_there.pack(side = "top")
+        if(len(self.questionString) == 0):
+            hi_there = tk.Message(self)
+            hi_there["text"] = "\nDeck is Empty!\n"
+            hi_there["width"] = 1000
+            hi_there.pack(side = "top")
 
-        self.questionGUI = tk.Message(self)
-        self.questionGUI["fg"] = 'black'
-        self.questionGUI["width"] = 600
-        self.questionGUI["text"] = self.questionString[self.index] + "\n"
-        self.questionGUI.pack(side = "top")
+            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu.pack(side = "bottom")
 
-        self.answerGUI = tk.Message(self)
-        self.answerGUI["fg"] = 'white'
-        self.answerGUI["width"] = 600
-        self.answerGUI["text"] = self.answerString[self.index] + "\n"
-        self.answerGUI.pack(side = "top")
+        else:
+            hi_there = tk.Message(self)
+            hi_there["text"] = "\nNow Viewing Deck!\n"
+            hi_there["width"] = 1000
+            hi_there.pack(side = "top")
 
-        answer = tk.Button(self, text="Flip")
-        answer["command"] = lambda: self.openFrame()
-        answer.pack(side = "top")
+            self.questionGUI = tk.Message(self)
+            self.questionGUI["fg"] = 'black'
+            self.questionGUI["width"] = 600
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
 
-        previousCard = tk.Button(self, text="Previous Card")
-        previousCard["command"] = lambda : self.decrementIndex()
-        previousCard.pack(side = "left")
+            self.answerGUI = tk.Message(self)
+            self.answerGUI["fg"] = 'white'
+            self.answerGUI["width"] = 600
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
 
-        nextCard = tk.Button(self, text="Next Card")
-        nextCard["command"] = lambda : self.incrementIndex()
-        nextCard.pack(side = "right")
+            answer = tk.Button(self, text="Flip")
+            answer["command"] = lambda: self.openFrame()
+            answer.pack(side = "top")
 
-        quit = tk.Button(self, text="Quit Program", command=self.quit)
-        quit.pack(side = "bottom")
+            previousCard = tk.Button(self, text="Previous Card")
+            previousCard["command"] = lambda : self.decrementIndex()
+            previousCard.pack(side = "left")
 
-        menu = tk.Button(self, text="Back to Menu",command=self.goBack)
-        menu.pack(side = "bottom")
+            nextCard = tk.Button(self, text="Next Card")
+            nextCard["command"] = lambda : self.incrementIndex()
+            nextCard.pack(side = "right")
+
+            quit = tk.Button(self, text="Quit Program", command=self.quit)
+            quit.pack(side = "bottom")
+
+            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu.pack(side = "bottom")
 
     def incrementIndex(self):
         self.index += 1
