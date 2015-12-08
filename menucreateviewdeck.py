@@ -7,7 +7,6 @@ from tkinter import *
 import tkinter.messagebox
 from flashcard_classes import *
 
-
 mainController = FlashcardController()
 mainFileSys = FileSystemStorage()
 deckName = ""
@@ -33,7 +32,7 @@ class switchWindow(tk.Tk):
 
         self.frames = {}
 
-        for F in (Application,createDeck,addCards,viewCards):
+        for F in (Application,createDeck,addCards,viewCards, viewDecks, deleteDecks):
 
             frame = F(self.container, self)
 
@@ -52,9 +51,9 @@ class switchWindow(tk.Tk):
             tk.Tk.wm_title(self,"Team Syntax Error's Flash Card Program")
         elif c == createDeck:
             tk.Tk.wm_title(self,"Create Deck")
-        elif c == viewCards:
+        elif c == viewDecks:
             tk.Tk.wm_title(self,"View Cards")
-            for F in (Application,createDeck,addCards,viewCards):
+            for F in (Application,createDeck,addCards,viewCards, deleteDecks):
 
                 frame = F(self.container, self)
 
@@ -76,7 +75,7 @@ class switchWindow(tk.Tk):
 class Application(tk.Frame):
     def __init__(self, master,controller):
         tk.Frame.__init__(self, master)
-        self.pack()
+        #self.pack()
         self.createWidgets()
         self.controller = controller
         #http://stackoverflow.com/questions/15306631/how-tocreate-children-windows-using-python-tkinter
@@ -136,11 +135,11 @@ class Application(tk.Frame):
     def create(self):
         self.controller.show_frame(createDeck)
     def view(self):
-        self.controller.show_frame(viewCards)
+        self.controller.show_frame(viewDecks)
     def edit(self):
         print("Select a Deck")
     def delete(self):
-        print("Select a Deck to delete: ")
+        self.controller.show_frame(deleteDecks)
 
     def quit(self):
         self.controller.quitProgram()
@@ -321,15 +320,12 @@ class viewCards(tk.Frame):
         self.index = 0
         #debug = True
 
-        # Read from file system
         decks = mainController.get_decks()
         for deck in decks:
             cards = deck.get_cards()
             for card in cards:
                 self.questionString.append(card.get_term())
                 self.answerString.append(card.get_definition())
-
-        print("Length qstring = ", len(self.questionString))
 
         if(len(self.questionString) == 0):
             hi_there = tk.Message(self)
@@ -415,6 +411,206 @@ class viewCards(tk.Frame):
         elif self.questionGUI["fg"] == 'white':
             self.questionGUI["fg"] = 'black'
 
+
+#TODO: CURRENTLY A WORK IN PROGRESS. GET CLICKING ON DECK T OONLY DISPLAY THE DECK SELECTED
+# LOOK UP .withdrawl function to see how to replace the window
+
+class viewDecks(tk.Frame):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, master,controller):
+        item = tk.Frame.__init__(self, master)
+        self.controller = controller
+        self.createWidgets()
+    
+    def createWidgets(self):
+        
+        self.deckString = []
+        self.index = 0
+       
+        # Testing the file system
+
+        hi_there = tk.Message(self)
+        hi_there["text"] = "\nWhich Deck to View?\n"
+        hi_there["width"] = 1000
+        hi_there.pack(side = "top")
+
+        
+        decks = mainController.get_decks()
+        for deck in decks:
+            deck_name = deck.get_name()
+            self.deck = tk.Button(self)
+            self.deck["text"] = deck_name
+            self.deck["command"] = lambda nameOfDeck = deck_name: self.view(nameOfDeck)
+            self.deck.pack(side="top")
+     
+        quit = tk.Button(self, text="Quit Program", command=self.quit)
+        quit.pack(side = "bottom")
+
+        menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+        menu.pack(side = "bottom")
+        
+        
+    def view(self, deck_name):       
+        for deck in mainController.get_decks():
+            if deck.get_name() == deck_name:
+                self.questionString = []
+                self.answerString = []
+                self.index = 0
+                #debug = True
+                cards = deck.get_cards()
+                for card in cards:
+                    self.questionString.append(card.get_term())
+                    self.answerString.append(card.get_definition())
+
+                if(len(self.questionString) == 0):
+                    hi_there = tk.Message(self)
+                    hi_there["text"] = "\nDeck is Empty!\n"
+                    hi_there["width"] = 1000
+                    hi_there.pack(side = "top")
+
+                    menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+                    menu.pack(side = "bottom")
+
+                else:
+                    hi_there = tk.Message(self)
+                    hi_there["text"] = "\nNow Viewing Deck!\n"
+                    hi_there["width"] = 1000
+                    hi_there.pack(side = "top")
+
+                    self.questionGUI = tk.Message(self)
+                    self.questionGUI["fg"] = 'black'
+                    self.questionGUI["width"] = 600
+                    self.questionGUI["text"] = self.questionString[self.index] + "\n"
+                    self.questionGUI.pack(side = "top")
+
+                    self.answerGUI = tk.Message(self)
+                    self.answerGUI["fg"] = 'white'
+                    self.answerGUI["width"] = 600
+                    self.answerGUI["text"] = self.answerString[self.index] + "\n"
+                    self.answerGUI.pack(side = "top")
+
+                    answer = tk.Button(self, text="Flip")
+                    answer["command"] = lambda: self.openFrame()
+                    answer.pack(side = "top")
+
+                    previousCard = tk.Button(self, text="Previous Card")
+                    previousCard["command"] = lambda : self.decrementIndex()
+                    previousCard.pack(side = "left")
+
+                    nextCard = tk.Button(self, text="Next Card")
+                    nextCard["command"] = lambda : self.incrementIndex()
+                    nextCard.pack(side = "right")
+
+    def incrementIndex(self):
+        self.index += 1
+
+        if (self.index == len(self.questionString)):
+            self.index = len(self.questionString) - 1
+        else:
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
+
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
+
+    def decrementIndex(self):
+
+        if (self.index == 0):
+            self.index = 0
+        else:
+            self.index -= 1
+            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
+
+            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
+
+    def goBack(self):
+            self.controller.show_frame(Application)
+    #----------------------------------------------------------------------
+
+    def openFrame(self):
+        if self.answerGUI["fg"] == 'white':
+            self.answerGUI["fg"] = 'black'
+        elif self.answerGUI["fg"] == 'black':
+            self.answerGUI["fg"] = 'white'
+
+        if self.questionGUI["fg"] == 'black':
+            self.questionGUI["fg"] = 'white'
+        elif self.questionGUI["fg"] == 'white':
+            self.questionGUI["fg"] = 'black'
+
+
+class deleteDecks(tk.Frame):
+
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, master,controller):
+        item = tk.Frame.__init__(self, master)
+        self.controller = controller
+        self.createWidgets()
+
+    def createWidgets(self):
+        global mainController
+        global mainFileSys
+
+        decks = mainController.get_decks()
+
+        # check if there are decks to delete
+        # if there are no decks, we let them know and return to the main menu
+        if not decks:
+            nothing_to_delete = tk.Message(self)
+            nothing_to_delete["text"] = "\nThere are no decks to delete!\n"
+            nothing_to_delete["width"] = 1000
+            nothing_to_delete.pack(side = "top")
+
+            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu.pack(side = "bottom")
+        # if the else is reached, then we have decks
+        # create a deck for reach button which will allow us to delete it on click
+        else:
+            stuff_to_delete = tk.Message(self)
+            stuff_to_delete["text"] = "\nWhich Deck to Delete?\n"
+            stuff_to_delete["width"] = 1000
+            stuff_to_delete.pack(side = "top")
+
+            # loop through the decks and csagefreate buttons for each one (using the deck's name)
+            for deck in decks:
+                deck_name = deck.get_name()
+                self.deck = tk.Button(self)
+                self.deck["text"] = deck_name
+                self.deck["command"] = lambda nameOfDeck = deck_name: self.delete(nameOfDeck)
+                self.deck.pack(side="top")
+
+
+            quit = tk.Button(self, text="Quit Program", command=self.quit)
+            quit.pack(side = "bottom")
+
+            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu.pack(side = "bottom")
+
+    def delete(self, deck_name):
+        dialog_title = 'Deletion Confirmation'
+        dialog_text = 'Are you sure you want to delete this deck?'
+        answer = tkinter.messagebox.askquestion(dialog_title, dialog_text)
+        
+        if answer == 'yes':
+            mainController.delete_deck(deck_name)
+            mainFileSys.write_to_file(mainController)
+            
+            success = tk.Message(self)
+            success["text"] = "\nSuccessfully deleted: '" + deck_name + "'!\n\n\n"
+            success["width"] = 1000
+            success.pack(side = "bottom")
+        else:
+            return
+
+    def goBack(self):
+        self.controller.show_frame(Application)
+
+    def quit(self):
+        self.controller.quitProgram()
 
 def main():
     create = switchWindow()
