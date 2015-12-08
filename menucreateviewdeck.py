@@ -451,7 +451,9 @@ class viewDecks(tk.Frame):
         menu.pack(side = "bottom")
         
         
-    def view(self, deck_name):       
+    def view(self, deck_name): 
+        self.deck.pack_forget() ##DELETES LAST DECK BUTTON. NEED IT TO DELETE ALL DECK BUTTONS. 
+        
         for deck in mainController.get_decks():
             if deck.get_name() == deck_name:
                 self.questionString = []
@@ -474,7 +476,7 @@ class viewDecks(tk.Frame):
 
                 else:
                     hi_there = tk.Message(self)
-                    hi_there["text"] = "\nNow Viewing Deck!\n"
+                    hi_there["text"] = "\nNow Viewing " + deck_name + " Deck!\n"
                     hi_there["width"] = 1000
                     hi_there.pack(side = "top")
 
