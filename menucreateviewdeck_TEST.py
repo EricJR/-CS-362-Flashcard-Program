@@ -7,11 +7,9 @@ from tkinter import *
 import tkinter.messagebox
 from flashcard_classes import *
 
-
 mainController = FlashcardController()
 mainFileSys = FileSystemStorage()
 deckName = ""
-
 mainFileSys.read_from_file(mainController)
 
 #Helps "switch" windows by hiding windows and raising desired window
@@ -20,7 +18,7 @@ class switchWindow(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         #tk.Tk.wm_title(self,"Create Deck")
-        tk.Tk.geometry(self,"400x400")
+        tk.Tk.geometry(self,"600x600")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -33,7 +31,7 @@ class switchWindow(tk.Tk):
 
         self.frames = {}
 
-        for F in (Application,createDeck,addCards,viewCards, viewDecks):
+        for F in (Application,createDeck,addCards,viewCards,viewDecks,deleteDecks):
 
             frame = F(self.container, self)
 
@@ -48,21 +46,30 @@ class switchWindow(tk.Tk):
     #Used to show the desired frame.  Will name the frame based on the class
     def show_frame(self, c):
         '''Show a frame for the given class'''
+        for F in (Application,createDeck,addCards,viewCards,viewDecks,deleteDecks):
+
+                frame = F(self.container, self)
+
+                self.frames[F] = frame
+                frame.grid(row=0, column=0, sticky="nsew")
+
         if c == Application:
             tk.Tk.wm_title(self,"Team Syntax Error's Flash Card Program")
         elif c == createDeck:
             tk.Tk.wm_title(self,"Create Deck")
         elif c == viewDecks:
-            tk.Tk.wm_title(self,"View Cards")
-            for F in (Application,createDeck,addCards,viewCards):
+            tk.Tk.wm_title(self,"View Decks")
+            #for F in (Application,createDeck,addCards,viewCards, deleteDecks):
 
-                frame = F(self.container, self)
+                #frame = F(self.container, self)
 
-                self.frames[F] = frame
+                #self.frames[F] = frame
         # put all of the pages in the same location;
         # the one on the top of the stacking order
         # will be the one that is visible.
-                frame.grid(row=0, column=0, sticky="nsew")
+                #frame.grid(row=0, column=0, sticky="nsew")
+        elif c == deleteDecks:
+            tk.Tk.wm_title(self,"Delete Decks")
         else:
             tk.Tk.wm_title(self,"Add Cards")
         frame = self.frames[c]
@@ -90,46 +97,46 @@ class Application(tk.Frame):
         # self.lol = tk.Message(self)
         # self.lol
 
-        self.hi_there = tk.Message(self)
+        hi_there = tk.Message(self)
         #self.hi_there["cursor"] = 'dot'     #Cursor changes to a dot when you hover over 'Flash Card Program'
-        self.hi_there["text"] = "\nFlash Card Program!\n"
+        hi_there["text"] = "\nFlash Card Program!\n"
         #self.hi_there["anchor"] = 'n'
-        self.hi_there["fg"] = 'blue'                        ##Changes font color
-        self.hi_there["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        hi_there["fg"] = 'blue'                        ##Changes font color
+        hi_there["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
         #self.hi_there["bg"] = 'black'                      ##Changes background color
-        self.hi_there.pack(side="top")
+        hi_there.pack(side="top")
 
-        self.newCard = tk.Button(self)
-        self.newCard["text"] = "Create New Flashcard Deck!"
-        self.newCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.newCard["command"] = self.create
-        self.newCard.pack(side="top")
+        newCard = tk.Button(self)
+        newCard["text"] = "Create New Flashcard Deck!"
+        newCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        newCard["command"] = self.create
+        newCard.pack(side="top")
 
         #self.newCard["command"] = root.destroy
 
-        self.viewCard = tk.Button(self)
-        self.viewCard["text"] = "View Flashcard Deck!"
-        self.viewCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.viewCard["command"] = self.view
-        self.viewCard.pack(side="top")
+        viewCard = tk.Button(self)
+        viewCard["text"] = "View Flashcard Deck!"
+        viewCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        viewCard["command"] = self.view
+        viewCard.pack(side="top")
         #self.viewCard["command"] = root.destroy
 
-        self.editCard = tk.Button(self)
-        self.editCard["text"] = "Edit Flashcard Deck!"
-        self.editCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.editCard["command"] = self.edit
-        self.editCard.pack(side="top")
+        editCard = tk.Button(self)
+        editCard["text"] = "Edit Flashcard Deck!"
+        editCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        editCard["command"] = self.edit
+        editCard.pack(side="top")
         #self.editCard["command"] = root.destroy
 
-        self.deleteCard = tk.Button(self)
-        self.deleteCard["text"] = "Delete Flashcard Deck!"
-        self.deleteCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.deleteCard["command"] = self.delete
-        self.deleteCard.pack(side="top")
+        deleteCard = tk.Button(self)
+        deleteCard["text"] = "Delete Flashcard Deck!"
+        deleteCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        deleteCard["command"] = self.delete
+        deleteCard.pack(side="top")
         #self.deleteCard["command"] = root.destroy
 
-        self.QUIT = tk.Button(self, text="Quit Program", fg="red", font="Helvetica 14 bold italic", command=self.quit)
-        self.QUIT.pack(side="bottom")
+        QUIT = tk.Button(self, text="Quit Program", fg="red", font="Helvetica 14 bold italic", command=self.quit)
+        QUIT.pack(side="bottom")
 
     def say_hi(self):
         print("Welcome to the flash card program!")
@@ -140,7 +147,7 @@ class Application(tk.Frame):
     def edit(self):
         print("Select a Deck")
     def delete(self):
-        print("Select a Deck to delete: ")
+        self.controller.show_frame(deleteDecks)
 
     def quit(self):
         self.controller.quitProgram()
@@ -153,9 +160,6 @@ class createDeck(tk.Frame):
         tk.Frame.__init__(self, master)
         self.controller = controller
         self.createWidgets()
-
-    def goBack(self):
-        self.controller.show_frame(Application)
 
     def createWidgets(self):
 
@@ -217,6 +221,8 @@ class createDeck(tk.Frame):
             self.e1.delete(0,END)
             self.e2.delete(0,END)
 
+    def goBack(self):
+        self.controller.show_frame(Application)
 
 #User will enter Question and Answer. After user presses exit, the cards along with the deck name and description will be saved to the text file
 # Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
@@ -228,9 +234,9 @@ class addCards(tk.Frame):
         self.controller = controller
 
     def goBack(self):
-        self.controller.show_frame(Application)
-        #Will save the deck name if the user just chooses to go back to the main menu
         mainFileSys.write_to_file(mainController)
+        #Will save the deck name if the user just chooses to go back to the main menu
+        self.controller.show_frame(Application)
 
     def createWidgets(self):
 
@@ -281,7 +287,7 @@ class addCards(tk.Frame):
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.backCard.get()) == 0:
             #tkinter.messagebox.showinfo("Error", "You need to enter an Answer!")
-            self.status = Label(self,text="Error: You need to enter an Answer",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter an Answer!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         else:
             for deck in mainController.get_decks():
@@ -300,6 +306,7 @@ class addCards(tk.Frame):
         self.controller.quitProgram()
 
 #View Flashcards
+
 class viewCards(tk.Frame):
     """"""
     #----------------------------------------------------------------------
@@ -334,7 +341,7 @@ class viewCards(tk.Frame):
             hi_there["width"] = 1000
             hi_there.pack(side = "top")
 
-            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
             menu.pack(side = "bottom")
 
         else:
@@ -370,7 +377,7 @@ class viewCards(tk.Frame):
             quit = tk.Button(self, text="Quit Program", command=self.quit)
             quit.pack(side = "bottom")
 
-            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
             menu.pack(side = "bottom")
 
     def incrementIndex(self):
@@ -412,6 +419,10 @@ class viewCards(tk.Frame):
         elif self.questionGUI["fg"] == 'white':
             self.questionGUI["fg"] = 'black'
 
+
+#TODO: CURRENTLY A WORK IN PROGRESS. GET CLICKING ON DECK TO ONLY DISPLAY THE DECK SELECTED
+# LOOK UP .withdrawl function to see how to replace the window
+
 class viewDecks(tk.Frame):
     """"""
     #----------------------------------------------------------------------
@@ -444,7 +455,7 @@ class viewDecks(tk.Frame):
         quit = tk.Button(self, text="Quit Program", command=self.quit)
         quit.pack(side = "bottom")
 
-        menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+        menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
         menu.pack(side = "bottom")
         
         
@@ -466,7 +477,7 @@ class viewDecks(tk.Frame):
                     hi_there["width"] = 1000
                     hi_there.pack(side = "top")
 
-                    menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+                    menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
                     menu.pack(side = "bottom")
 
                 else:
@@ -537,6 +548,76 @@ class viewDecks(tk.Frame):
             self.questionGUI["fg"] = 'white'
         elif self.questionGUI["fg"] == 'white':
             self.questionGUI["fg"] = 'black'
+
+
+class deleteDecks(tk.Frame):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, master,controller):
+        item = tk.Frame.__init__(self, master)
+        self.controller = controller
+        self.createWidgets()
+
+    def createWidgets(self):
+        global mainController
+        global mainFileSys
+
+        decks = mainController.get_decks()
+
+        # check if there are decks to delete
+        # if there are no decks, we let them know and return to the main menu
+        if not decks:
+            nothing_to_delete = tk.Message(self)
+            nothing_to_delete["text"] = "\nThere are no decks to delete!\n"
+            nothing_to_delete["width"] = 1000
+            nothing_to_delete.pack(side = "top")
+
+            menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
+            menu.pack(side = "bottom")
+        # if the else is reached, then we have decks
+        # create a deck for reach button which will allow us to delete it on click
+        else:
+            stuff_to_delete = tk.Message(self)
+            stuff_to_delete["text"] = "\nWhich Deck to Delete?\n"
+            stuff_to_delete["width"] = 1000
+            stuff_to_delete.pack(side = "top")
+
+            # loop through the decks and csagefreate buttons for each one (using the deck's name)
+            for deck in decks:
+                deck_name = deck.get_name()
+                self.deck = tk.Button(self)
+                self.deck["text"] = deck_name
+                self.deck["command"] = lambda nameOfDeck = deck_name: self.delete(nameOfDeck)
+                self.deck.pack(side="top")
+
+
+            quit = tk.Button(self, text="Quit Program", command=self.quit)
+            quit.pack(side = "bottom")
+
+            menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
+            menu.pack(side = "bottom")
+
+    def delete(self, deck_name):
+        dialog_title = 'Deletion Confirmation'
+        dialog_text = 'Are you sure you want to delete this deck?'
+        answer = tkinter.messagebox.askquestion(dialog_title, dialog_text)
+        
+        if answer == 'yes':
+            mainController.delete_deck(deck_name)
+            mainFileSys.write_to_file(mainController)
+            
+            success = tk.Message(self)
+            success["text"] = "\nSuccessfully deleted: '" + deck_name + "'!\n\n\n"
+            success["width"] = 1000
+            success.pack(side = "bottom")
+        else:
+            return
+
+    def goBack(self):
+        self.controller.show_frame(Application)
+
+    def quit(self):
+        self.controller.quitProgram()
 
 def main():
     create = switchWindow()
