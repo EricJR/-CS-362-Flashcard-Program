@@ -430,6 +430,8 @@ class viewDecks(tk.Frame):
         item = tk.Frame.__init__(self, master)
         self.controller = controller
         self.createWidgets()
+        self.hi_there = tk.Message(self)
+        self.questionGUI = tk.Message(self)
     
     def createWidgets(self):
         
@@ -488,12 +490,12 @@ class viewDecks(tk.Frame):
                     self.hi_there.pack(side = "top")
 
                 else:
-                    self.hi_there = tk.Message(self)
+                    #self.hi_there = tk.Message(self)
                     self.hi_there["text"] = "\nNow Viewing Deck" + deck_name + "!\n"
                     self.hi_there["width"] = 1000
                     self.hi_there.pack(side = "top")
 
-                    self.questionGUI = tk.Message(self)
+                    #self.questionGUI = tk.Message(self)
                     self.questionGUI["fg"] = 'black'
                     self.questionGUI["width"] = 600
                     self.questionGUI["text"] = self.questionList[self.index] + "\n"
