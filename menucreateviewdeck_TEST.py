@@ -91,7 +91,7 @@ class Application(tk.Frame):
         #http://www.python-course.eu/tkinter_message_widget.php
     def createWidgets(self):
         #self.master.title("Team Syntax Error's Flash Card Program")
-        #self.master.geometry("400x400")
+        #self.master.geometry("600x600")
         #self.master.config(cursor='dot')
 
         # self.lol = tk.Message(self)
@@ -323,8 +323,8 @@ class viewCards(tk.Frame):
         #self.frame = Tk.Frame(parent)
         #self.frame.pack()
 
-        self.questionString = []
-        self.answerString = []
+        self.questionList = []
+        self.answerList = []
         self.index = 0
         #debug = True
 
@@ -332,10 +332,10 @@ class viewCards(tk.Frame):
         for deck in decks:
             cards = deck.get_cards()
             for card in cards:
-                self.questionString.append(card.get_term())
-                self.answerString.append(card.get_definition())
+                self.questionList.append(card.get_term())
+                self.answerList.append(card.get_definition())
 
-        if(len(self.questionString) == 0):
+        if(len(self.questionList) == 0):
             hi_there = tk.Message(self)
             hi_there["text"] = "\nDeck is Empty!\n"
             hi_there["width"] = 1000
@@ -353,13 +353,13 @@ class viewCards(tk.Frame):
             self.questionGUI = tk.Message(self)
             self.questionGUI["fg"] = 'black'
             self.questionGUI["width"] = 600
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
             self.answerGUI = tk.Message(self)
             self.answerGUI["fg"] = 'white'
             self.answerGUI["width"] = 600
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
             answer = tk.Button(self, text="Flip")
@@ -383,13 +383,13 @@ class viewCards(tk.Frame):
     def incrementIndex(self):
         self.index += 1
 
-        if (self.index == len(self.questionString)):
-            self.index = len(self.questionString) - 1
+        if (self.index == len(self.questionList)):
+            self.index = len(self.questionList) - 1
         else:
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
     def decrementIndex(self):
@@ -398,10 +398,10 @@ class viewCards(tk.Frame):
             self.index = 0
         else:
             self.index -= 1
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
     def goBack(self):
@@ -459,67 +459,74 @@ class viewDecks(tk.Frame):
         menu.pack(side = "bottom")
         
         
-    def view(self, deck_name):       
+    def view(self, deck_name):
+        """   
+        eric = input("Enter: ")
+        if eric == 1:
+            self.questionGUI.pack_forget()
+            self.answerGUI.pack_forget()
+            self.answer.pack_forget()
+            self.previousCard.pack_forget()
+            self.nextCard.pack_forget()
+        """
+          
         for deck in mainController.get_decks():
             if deck.get_name() == deck_name:
-                self.questionString = []
-                self.answerString = []
+                self.questionList = []
+                self.answerList = []
                 self.index = 0
                 #debug = True
                 cards = deck.get_cards()
                 for card in cards:
-                    self.questionString.append(card.get_term())
-                    self.answerString.append(card.get_definition())
+                    self.questionList.append(card.get_term())
+                    self.answerList.append(card.get_definition())
 
-                if(len(self.questionString) == 0):
-                    hi_there = tk.Message(self)
-                    hi_there["text"] = "\nDeck is Empty!\n"
-                    hi_there["width"] = 1000
-                    hi_there.pack(side = "top")
-
-                    menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
-                    menu.pack(side = "bottom")
+                if(len(self.questionList) == 0):
+                    self.hi_there = tk.Message(self)
+                    self.hi_there["text"] = "\nDeck is Empty!\n"
+                    self.hi_there["width"] = 1000
+                    self.hi_there.pack(side = "top")
 
                 else:
-                    hi_there = tk.Message(self)
-                    hi_there["text"] = "\nNow Viewing Deck!\n"
-                    hi_there["width"] = 1000
-                    hi_there.pack(side = "top")
+                    self.hi_there = tk.Message(self)
+                    self.hi_there["text"] = "\nNow Viewing Deck" + deck_name + "!\n"
+                    self.hi_there["width"] = 1000
+                    self.hi_there.pack(side = "top")
 
                     self.questionGUI = tk.Message(self)
                     self.questionGUI["fg"] = 'black'
                     self.questionGUI["width"] = 600
-                    self.questionGUI["text"] = self.questionString[self.index] + "\n"
+                    self.questionGUI["text"] = self.questionList[self.index] + "\n"
                     self.questionGUI.pack(side = "top")
 
                     self.answerGUI = tk.Message(self)
                     self.answerGUI["fg"] = 'white'
                     self.answerGUI["width"] = 600
-                    self.answerGUI["text"] = self.answerString[self.index] + "\n"
+                    self.answerGUI["text"] = self.answerList[self.index] + "\n"
                     self.answerGUI.pack(side = "top")
 
-                    answer = tk.Button(self, text="Flip")
-                    answer["command"] = lambda: self.openFrame()
-                    answer.pack(side = "top")
+                    self.answer = tk.Button(self, text="Flip")
+                    self.answer["command"] = lambda: self.openFrame()
+                    self.answer.pack(side = "top")
 
-                    previousCard = tk.Button(self, text="Previous Card")
-                    previousCard["command"] = lambda : self.decrementIndex()
-                    previousCard.pack(side = "left")
+                    self.previousCard = tk.Button(self, text="Previous Card")
+                    self.previousCard["command"] = lambda : self.decrementIndex()
+                    self.previousCard.pack(side = "left")
 
-                    nextCard = tk.Button(self, text="Next Card")
-                    nextCard["command"] = lambda : self.incrementIndex()
-                    nextCard.pack(side = "right")
+                    self.nextCard = tk.Button(self, text="Next Card")
+                    self.nextCard["command"] = lambda : self.incrementIndex()
+                    self.nextCard.pack(side = "right")
 
     def incrementIndex(self):
         self.index += 1
 
-        if (self.index == len(self.questionString)):
-            self.index = len(self.questionString) - 1
+        if (self.index == len(self.questionList)):
+            self.index = len(self.questionList) - 1
         else:
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
     def decrementIndex(self):
@@ -528,10 +535,10 @@ class viewDecks(tk.Frame):
             self.index = 0
         else:
             self.index -= 1
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
     def goBack(self):
