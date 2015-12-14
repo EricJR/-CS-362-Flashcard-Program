@@ -7,7 +7,7 @@
 #  Project title: Flash Card Program (aka Never Baguette)
 #  Purpose: There are a multitude of resources available to students to make flash cards, but our goal with Never Baguette was to expand the user’s capabilities. This
 #    program allows those who use it to create flash cards for effective studying.  Users just have to follow simple instructions to create decks of cards. The program
-#    will let them view, edit, and delete decks that they make. It saves paper since everything is done on the computer.  This program will assist countless students on 
+#    will let them view, edit, and delete decks that they make. It saves paper since everything is done on the computer.  This program will assist countless students on
 #    their quests for knowledge.
 #  Project files: main.py, flashcard_gui.py, flashcard_classes.py, flashcards_file.txt
 #Module information
@@ -19,7 +19,7 @@
 #References and credits
 #  Credits: The internet for its vast knowledge of the library tkinter.
 #Permissions
-#  The source code is free for use by members of the CS-362 class.  Credit this source if you borrow executable statements from this program.  The instructions 
+#  The source code is free for use by members of the CS-362 class.  Credit this source if you borrow executable statements from this program.  The instructions
 #  are free to use, but create your own comments.  The comments are intellectual property.
 #
 #===== Begin code area ===================================================================================================================================================
@@ -126,42 +126,38 @@ class mainMenu(tk.Frame):
 
     def createWidgets(self):
         # Create a welcome message, which is the name of the program.
-        welcomeMessage = tk.Message(self)
-        welcomeMessage["text"] = "\nNever Baguette\n"
-        welcomeMessage["fg"] = 'blue'
-        welcomeMessage["font"] = 'Helvetica 14 bold'
-        welcomeMessage["width"] = 500
+        welcomeMessage = tk.Message(self, text="\nNever Baguette\n\n", fg="darkgoldenrod", font="HeadLine 32 bold", width=500)
         welcomeMessage.pack(side="top")
 
         # Make a button for creating a new deck.  It has an associated command (function) which allows the user to create a new deck when the button is clicked.
-        newCard = tk.Button(self)
-        newCard["text"] = "Create New Flashcard Deck!"
-        newCard["font"] = 'Helvetica 14 bold'
-        newCard["command"] = self.create
+        newCard = tk.Button(self, text="Create New Flashcard Deck!", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.create)
         newCard.pack(side="top")
 
+        # Make a space between the newCard and viewCard Buttons
+        spaceMessage1 = tk.Message(self, text="EmptyMessage", fg="white", font="Fireye 2")
+        spaceMessage1.pack(side="top")
+
         # Make a button for viewing decks.  It has an associated command (function) which allows the user to view his/her decks when the button is clicked.
-        viewCard = tk.Button(self)
-        viewCard["text"] = "View Flashcard Deck!"
-        viewCard["font"] = 'Helvetica 14 bold'
-        viewCard["command"] = self.view
+        viewCard = tk.Button(self, text="View Flashcard Deck!", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.view)
         viewCard.pack(side="top")
 
+        # Make a space between the viewCard and editCard Buttons
+        spaceMessage2 = tk.Message(self, text="EmptyMessage", fg="white", font="Fireye 2")
+        spaceMessage2.pack(side="top")
+
         # Make a button for editing decks.  It has an associated command (function) which allows the user to edit his/her decks when the button is clicked.
-        editCard = tk.Button(self)
-        editCard["text"] = "Edit Flashcard Deck!"
-        editCard["font"] = 'Helvetica 14 bold'
-        editCard["command"] = self.edit
+        editCard = tk.Button(self, text="Edit Flashcard Deck!", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.edit)
         editCard.pack(side="top")
 
+        # Make a space between the editCard and deleteCard Buttons
+        spaceMessage3 = tk.Message(self, text="EmptyMessage", fg="white", font="Fireye 2")
+        spaceMessage3.pack(side="top")
+
         # Make a button for deleting decks.  It has an associated command (function) which allows the user to delete his/her decks when the button is clicked.
-        deleteCard = tk.Button(self)
-        deleteCard["text"] = "Delete Flashcard Deck!"
-        deleteCard["font"] = 'Helvetica 14 bold'
-        deleteCard["command"] = self.delete
+        deleteCard = tk.Button(self, text="Delete Flashcard Deck!", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.delete)
         deleteCard.pack(side="top")
 
-        quit = tk.Button(self, text="Quit Program", font='Helvetica 14 bold', command=self.quit)
+        quit = tk.Button(self, text="Quit Program", font='Fireye 16 bold', fg="red", activeforeground="red", command=self.quit)
         quit.pack(side="bottom")
 
     # All of the following functions simply move the program to the frame associated with the function called.
@@ -201,33 +197,37 @@ class createDeck(tk.Frame):
         self.deckDescription = StringVar()
 
         # Make labels for "Enter Deck Name:" and "Enter Deck Description:"
-        Label(self, text="Enter Deck Name:").pack()
-        self.deck_name_box = tk.Entry(self, textvariable=self.deckName)
+        Label(self, text="\n\n\n\nEnter Deck Name:", font="HeadLine 16 bold", fg="darkgoldenrod").pack()
+        self.deck_name_box = tk.Entry(self, textvariable=self.deckName, font="HeadLine 13 bold", fg="sienna4")
         self.deck_name_box.pack()
 
-        Label(self, text="Enter Deck Description:").pack()
-        self.deck_desc_box = tk.Entry(self, textvariable=self.deckDescription)
+        Label(self, text="Enter Deck Description:", font="HeadLine 16 bold", fg="darkgoldenrod").pack()
+        self.deck_desc_box = tk.Entry(self, textvariable=self.deckDescription, font="HeadLine 13 bold", fg="sienna4")
         self.deck_desc_box.pack()
 
+        # Make a spacing between contents and button
+        spaceMessage = tk.Message(self, text="EmptyMessage", fg="white", font="Fireye 2")
+        spaceMessage.pack()
+
         # Make a button for saving a deck once content is read in from the user.
-        save_button = Button(self, text="Save Deck", command=self.saveContents)
+        save_button = Button(self, text="Save Deck", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.saveContents)
         save_button.pack()
 
         # Make a message to fill empty space down to the bottom of the page.
         empty_space = tk.Message(self)
-        empty_space["text"] = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+        empty_space["text"] = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
         empty_space.pack()
 
         # Make a button for returning to the main menu.
-        main_menu_button = Button(self, text="Go back to Main Menu", command=self.goBack)
+        main_menu_button = Button(self, text="Go back to Main Menu", font="Fireye 14 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.goBack)
         main_menu_button.pack()
 
         # Make a button for quitting the program.
-        exit_button = Button(self, text="Quit Program", command=self.quit)
+        exit_button = Button(self, text="Quit Program", font='Fireye 16 bold', fg="red", activeforeground="red", command=self.quit)
         exit_button.pack()
 
         # The status bar begins with a message to create a new deck
-        self.status = Label(self,text="Create a New Deck",bd=1,relief=SUNKEN,anchor=W)
+        self.status = Label(self,text="Create a New Deck",font="HeadLine 14 bold",fg="black",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
     # Save the deck into the mainController.
@@ -240,13 +240,13 @@ class createDeck(tk.Frame):
 
         # This will check if the user actually entered a deck name and description before it creates the new deck.  The first three cases handle both or either being empty.
         if len(self.deckName.get()) == 0 and len(self.deckDescription.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Deck Name and Description!",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Deck Name and Description!",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.deckName.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Deck Name!",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Deck Name!",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.deckDescription.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Deck Description!",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Deck Description!",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         # If the user puts input in both boxes, the deck creation will be successful.
         else:
@@ -287,34 +287,38 @@ class addCards(tk.Frame):
         self.backCard = StringVar()
 
         # Make labels for "Enter Term:" and "Enter Flashcard Definition:"
-        Label(self, text="Enter Flashcard Term:").pack()
-        self.card_term_box = tk.Entry(self, textvariable=self.cardFront)
+        Label(self, text="\n\n\n\nEnter Flashcard Term:", font="HeadLine 16 bold", fg="darkgoldenrod").pack()
+        self.card_term_box = tk.Entry(self, textvariable=self.cardFront, font="HeadLine 13 bold", fg="sienna4")
         self.card_term_box.pack()
 
-        Label(self, text="Enter Flashcard Definition:").pack()
-        self.card_def_box = tk.Entry(self, textvariable=self.backCard)
+        Label(self, text="Enter Flashcard Definition:", font="HeadLine 16 bold", fg="darkgoldenrod").pack()
+        self.card_def_box = tk.Entry(self, textvariable=self.backCard, font="HeadLine 13 bold", fg="sienna4")
         self.card_def_box.pack()
 
+        # Make a spacing between contents and button
+        spaceMessage = tk.Message(self, text=" ", font="Fireye 2")
+        spaceMessage.pack()
+
         # User needs to click save deck
-        button = Button(self, text="Save Card", command=self.saveContents)
+        button = Button(self, text="Save Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.saveContents)
         button.pack()
 
         # Make a message to fill empty space down to the bottom of the page.
         empty_space = tk.Message(self)
-        empty_space["text"] = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+        empty_space["text"] = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
         empty_space.pack()
 
-         # Make a button for returning to the main menu.
-        main_menu_button = Button(self, text="Go back to Main Menu", command=self.goBack)
+        # Make a button for returning to the main menu.
+        main_menu_button = Button(self, text="Go back to Main Menu", font="Fireye 14 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.goBack)
         main_menu_button.pack()
 
         # Make a button for quitting the program.
-        exit_button = Button(self, text="Quit Program", command=self.quit)
+        exit_button = Button(self, text="Quit Program", font='Fireye 16 bold', fg="red", activeforeground="red", command=self.quit)
         exit_button.pack()
 
         # The status bar begins with a message to add cards to the new deck.
         message_text = "Add Flashcards to Deck '" + mainDeckName + "'."
-        self.status = Label(self,text=message_text,bd=1,relief=SUNKEN,anchor=W)
+        self.status = Label(self,text=message_text,font="HeadLine 14 bold",fg="black",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
     #  Save the new cards into the mainController.
@@ -328,13 +332,13 @@ class addCards(tk.Frame):
 
         # This will check if the user actually entered a term and definition before it creates the new card.  The first three cases handle both or either being empty.
         if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Term and Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Term and Definition.",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.cardFront.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Term.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Term.",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.backCard.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Definition.",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         # If the user puts input in both boxes, the deck creation will be successful.
         else:
@@ -344,7 +348,7 @@ class addCards(tk.Frame):
             self.card_term_box.delete(0,END)
             self.card_def_box.delete(0,END)
             card_text = "Flashcard successfully added to Deck '" + mainDeckName + "'."
-            self.status = Label(self,text=card_text,bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text=card_text,font="HeadLine 14 bold",fg="lime green",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
 
     # The function called to return to the main menu.
@@ -378,44 +382,39 @@ class viewDecks(tk.Frame):
         self.emptyDeck = tk.Message(self)
         self.termGUI = tk.Message(self)
         self.defGUI = tk.Message(self)
-        self.answer = tk.Button(self, text="Flip")
-        self.previousCard = tk.Button(self, text="Previous Card")
-        self.nextCard = tk.Button(self, text="Next Card")
-    
+        self.answer = tk.Button(self, text="Flip", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
+        self.previousCard = tk.Button(self, text="Previous Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
+        self.nextCard = tk.Button(self, text="Next Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
+
     def createWidgets(self):
         self.index = 0
 
         # Make a message to ask the user which deck they wish to work with.
-        welcomeMessage = tk.Message(self)
-        welcomeMessage["text"] = "\nWhich Deck to View?\n"
-        welcomeMessage["width"] = 1000
+        welcomeMessage = tk.Message(self, text="\nWhich Deck to View\n", font="HeadLine 16 bold", fg="darkgoldenrod", width=1000)
         welcomeMessage.pack(side = "top")
-        
+
         # Get all the decks from the mainController.  They will be needed to make the buttons for each deck.
         decks = mainController.get_decks()
 
         # If there are no decks, no buttons will be created for viewing the decks. A message will be displayed to inform the user.
         if not decks:
-            no_decks = tk.Message(self)
-            no_decks["text"] = "\nThere are no decks to view!\n"
-            no_decks["width"] = 1000
+            no_decks = tk.Message(self, text="\nThere are no decks to view!\n", font="HeadLine 14 bold", fg="darkgoldenrod", width=1000)
             no_decks.pack(side = "top")
         # Create a button for each individual deck in the mainController.
         else:
             for deck in decks:
                 deck_name = deck.get_name()
-                self.deck = tk.Button(self)
-                self.deck["text"] = deck_name
+                self.deck = tk.Button(self, text=deck_name, font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
                 # A lambda function is made so that each deck's function is associated with only itself.
                 self.deck["command"] = lambda nameOfDeck = deck_name: self.view(nameOfDeck)
                 self.deck.pack(side="top")
 
         # Make a button for quitting the program.
-        exit_button = Button(self, text="Quit Program", command=self.quit)
+        exit_button = Button(self, text="Quit Program", font='Fireye 16 bold', fg="red", activeforeground="red", command=self.quit)
         exit_button.pack(side = "bottom")
-        
+
         # Make a button for returning to the main menu.
-        main_menu_button = Button(self, text="Go back to Main Menu", command=self.goBack)
+        main_menu_button = Button(self, text="Go back to Main Menu", font="Fireye 14 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.goBack)
         main_menu_button.pack(side = "bottom")
 
     # This function displays the deck being viewed and the current card.  It also creates the buttons for flipping and going to the next and previous cards.
@@ -428,7 +427,7 @@ class viewDecks(tk.Frame):
         self.nextCard.pack_forget()
         self.emptyDeck.pack_forget()
         self.currentDeck.pack_forget()
-        
+
         # Get the deck.
         deck = mainController.get_deck(deck_name)
 
@@ -438,13 +437,15 @@ class viewDecks(tk.Frame):
         self.index = 0
 
         cards = deck.get_cards()
-        for card in cards: 
+        for card in cards:
             self.termList.append(card.get_term())
             self.definitionList.append(card.get_definition())
 
         # Check to see if there are any cards in the deck.
         if(len(self.termList) == 0):
             self.emptyDeck = tk.Message(self)
+            self.emptyDeck["font"] = "HeadLine 14 bold"
+            self.emptyDeck["fg"] = "darkgoldenrod"
             self.emptyDeck["text"] = "\nDeck '" + deck_name + "' is empty.\n"
             self.emptyDeck["width"] = 1000
             self.emptyDeck.pack(side = "top")
@@ -452,13 +453,17 @@ class viewDecks(tk.Frame):
         else:
             self.currentDeck["text"] = "\nNow Viewing Deck '" + deck_name + "'\n"
             self.currentDeck["width"] = 1000
+            self.currentDeck["font"] = "HeadLine 14 bold"
+            self.currentDeck["fg"] = "darkgoldenrod"
             self.currentDeck.pack(side = "top")
 
-            self.termGUI["fg"] = 'black'
+            self.termGUI["font"] = "Fireye 14 bold"
+            self.termGUI["fg"] = 'orange red'
             self.termGUI["width"] = 600
             self.termGUI["text"] = self.termList[self.index] + "\n"
             self.termGUI.pack(side = "top")
 
+            self.defGUI["font"] = "Fireye 14 bold"
             self.defGUI["fg"] = 'white'
             self.defGUI["width"] = 600
             self.defGUI["text"] = self.definitionList[self.index] + "\n"
@@ -472,7 +477,7 @@ class viewDecks(tk.Frame):
 
             self.nextCard["command"] = lambda : self.incrementIndex()
             self.nextCard.pack(side = "right")
-                    
+
     # Increment the index. It checks the boundary of the list and changes the card on the screen to the next card if possible.
     def incrementIndex(self):
         self.index += 1
@@ -501,14 +506,14 @@ class viewDecks(tk.Frame):
     # Swaps between revealing and hiding the text based on the user clicking "Flip".
     def openFrame(self):
         if self.defGUI["fg"] == 'white':
-            self.defGUI["fg"] = 'black'
-        elif self.defGUI["fg"] == 'black':
+            self.defGUI["fg"] = 'orange red'
+        elif self.defGUI["fg"] == 'orange red':
             self.defGUI["fg"] = 'white'
 
-        if self.termGUI["fg"] == 'black':
+        if self.termGUI["fg"] == 'orange red':
             self.termGUI["fg"] = 'white'
         elif self.termGUI["fg"] == 'white':
-            self.termGUI["fg"] = 'black'
+            self.termGUI["fg"] = 'orange red'
 
     # The function called to return to the main menu.
     def goBack(self):
@@ -526,37 +531,35 @@ from the deck.
 """
 
 class editDecks(tk.Frame):
-
     def __init__(self, master,controller):
         item = tk.Frame.__init__(self, master)
         self.controller = controller
         self.createWidgets()
         # Because of the way replacing buttons is implemented in tkinter, we need to have private members created for each button that may be replaced.
-        self.currentDeck = tk.Message(self)
+        self.currentDeck = tk.Message(self, font="HeadLine 14 bold", fg="darkgoldenrod")
         self.emptyDeck = tk.Message(self)
-        self.termGUI = tk.Message(self)
-        self.defGUI = tk.Message(self)
-        self.addCard = tk.Button(self, text="Add New Card")
-        self.editCard = tk.Button(self, text="Edit Card")
-        self.deleteCard = tk.Button(self, text="Delete Card")
-        self.previousCard = tk.Button(self, text="Previous Card")
-        self.nextCard = tk.Button(self, text="Next Card")
+        self.termGUI = tk.Message(self, font="Fireye 14 bold", fg="black", width=700)
+        self.defGUI = tk.Message(self, font="Fireye 14 bold", fg="black", width=700)
+        self.addCard = tk.Button(self, text="Add New Card", font="Fireye 16 bold", fg="orange red", activeforeground="LightSkyBlue1")
+        self.editCard = tk.Button(self, text="Edit Card", font="Fireye 16 bold", fg="orange red", activeforeground="LightSkyBlue1")
+        self.deleteCard = tk.Button(self, text="Delete Card", font="Fireye 16 bold", fg="orange red", activeforeground="LightSkyBlue1")
+        self.previousCard = tk.Button(self, text="Previous Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
+        self.nextCard = tk.Button(self, text="Next Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
         self.cardFront = StringVar()
         self.backCard = StringVar()
-        self.card_term_label = Label(self, text="Enter Flashcard Term:")
-        self.card_def_label = Label(self, text="Enter Flashcard Definition:")
-        self.card_term_box = tk.Entry(self, textvariable=self.cardFront)
-        self.card_def_box = tk.Entry(self, textvariable=self.backCard)
-        self.save_button = Button(self, text="Save Card")
-        self.cancel_button = Button(self, text="Cancel Card Creation")
-    
+        self.card_term_label = Label(self, text="Enter Flashcard Term:", font="HeadLine 16 bold", fg="darkgoldenrod")
+        self.card_def_label = Label(self, text="Enter Flashcard Definition:", font="HeadLine 16 bold", fg="darkgoldenrod")
+        self.card_term_box = tk.Entry(self, textvariable=self.cardFront, font="HeadLine 13 bold", fg="sienna4")
+        self.card_def_box = tk.Entry(self, textvariable=self.backCard, font="HeadLine 13 bold", fg="sienna4")
+        self.spaceMessage = tk.Message(self, text=" ", fg="white", font="Fireye 2")
+        self.save_button = tk.Button(self, text="Save Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
+        self.cancel_button = tk.Button(self, text="Cancel Card Creation", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
+
     def createWidgets(self):
         self.index = 0
 
         # Make a message to ask the user which deck they wish to work with.
-        welcomeMessage = tk.Message(self)
-        welcomeMessage["text"] = "\nWhich Deck to Edit?\n"
-        welcomeMessage["width"] = 1000
+        welcomeMessage = tk.Message(self, text="\nWhich Deck to Edit\n", font="HeadLine 16 bold", fg="darkgoldenrod", width=1000)
         welcomeMessage.pack(side = "top")
         
         # Get all the decks from the mainController.  They will be needed to make the buttons for each deck.
@@ -564,26 +567,23 @@ class editDecks(tk.Frame):
 
         # If there are no decks, no buttons will be created for editing the decks. A message will be displayed to inform the user.
         if not decks:
-            no_decks = tk.Message(self)
-            no_decks["text"] = "\nThere are no decks to edit!\n"
-            no_decks["width"] = 1000
+            no_decks = tk.Message(self, text="\nThere are no decks to edit!\n", font="HeadLine 14 bold", fg="darkgoldenrod", width=1000)
             no_decks.pack(side = "top")
         # Create a button for each individual deck in the mainController.
         else:
             for deck in decks:
                 deck_name = deck.get_name()
-                self.deck = tk.Button(self)
-                self.deck["text"] = deck_name
+                self.deck = tk.Button(self, text=deck_name, font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
                 # A lambda function is made so that each deck's function is associated with only itself.
                 self.deck["command"] = lambda nameOfDeck = deck_name: self.edit(nameOfDeck)
                 self.deck.pack(side="top")
 
         # Make a button for quitting the program.
-        exit_button = Button(self, text="Quit Program", command=self.quit)
+        exit_button = Button(self, text="Quit Program", font='Fireye 16 bold', fg="red", activeforeground="red", command=self.quit)
         exit_button.pack(side = "bottom")
-        
+
         # Make a button for returning to the main menu.
-        main_menu_button = Button(self, text="Go back to Main Menu", command=self.goBack)
+        main_menu_button = Button(self, text="Go back to Main Menu", font="Fireye 14 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.goBack)
         main_menu_button.pack(side = "bottom")
 
         self.status = Label(self,text="",bd=1,relief=SUNKEN,anchor=W)
@@ -606,8 +606,10 @@ class editDecks(tk.Frame):
         self.card_def_box.pack_forget()
         self.card_term_label.pack_forget()
         self.card_def_label.pack_forget()
+        self.spaceMessage.pack_forget()
         self.save_button.pack_forget()
         self.cancel_button.pack_forget()
+
 
         # Get the deck.
         deck = mainController.get_deck(deck_name)
@@ -624,9 +626,7 @@ class editDecks(tk.Frame):
 
         # Check to see if there are any cards in the deck.
         if(len(self.termList) == 0):
-            self.emptyDeck = tk.Message(self)
-            self.emptyDeck["text"] = "\nDeck is Empty!\n"
-            self.emptyDeck["width"] = 1000
+            self.emptyDeck = tk.Message(self, text="\nDeck is Empty!\n", font="HeadLine 14 bold", fg="darkgoldenrod", width=1000)
             self.emptyDeck.pack(side = "top")
 
             self.addCard["command"] = lambda: self.add_card(deck_name)
@@ -638,7 +638,6 @@ class editDecks(tk.Frame):
             self.currentDeck["width"] = 1000
             self.currentDeck.pack(side = "top")
 
-            self.termGUI["width"] = 600
             self.termGUI["text"] = self.termList[self.index] + "\n"
             self.termGUI.pack(side = "top")
 
@@ -650,7 +649,7 @@ class editDecks(tk.Frame):
             self.addCard["command"] = lambda: self.add_card(deck_name)
             self.addCard.pack(side = "top")
 
-            self.editCard["command"] = lambda: self.edit_card()
+            self.editCard["command"] = lambda: self.edit_card(deck_name)
             self.editCard.pack(side = "top")
 
             self.deleteCard["command"] = lambda: self.delete_card(deck_name)
@@ -688,35 +687,26 @@ class editDecks(tk.Frame):
             self.defGUI["text"] = self.definitionList[self.index] + "\n"
             self.defGUI.pack(side = "top")
 
-
-
-
-#==== STILL A WORK IN PROGRESS ================================================================================================
-
-# TODO: make it add cards
-# Allows the user to add a card to the deck which is currently selected.
-
+    # For adding an individual card to the currently selected deck.
     def add_card(self, deck_name):
         self.addCard.pack_forget()
         self.editCard.pack_forget()
         self.deleteCard.pack_forget()
         self.status.destroy()
 
-        # Make labels for "Enter Term:" and "Enter Flashcard Definition:"
-        #self.card_term_label.pack()
-        #self.card_term_box = tk.Entry(self, textvariable=self.cardFront)
+        self.card_term_label.pack()
         self.card_term_box.pack()
-
-        #self.card_def_label = Label(self, text="Enter Flashcard Definition:")
         self.card_def_label.pack()
-        #self.card_def_box = tk.Entry(self, textvariable=self.backCard)
         self.card_def_box.pack()
+        # Make a spacing between contents and button
+        self.spaceMessage.pack()
 
         # User needs to click save deck.
         self.save_button["command"] = lambda: self.save_card(deck_name)
         self.save_button.pack()
 
-        self.cancel_button["command"] = lambda: self.cancel_card()
+        # To stop the action.
+        self.cancel_button["command"] = lambda: self.cancel_new_card()
         self.cancel_button.pack()
 
         # The status bar begins with a message to add cards to the new deck.
@@ -724,6 +714,7 @@ class editDecks(tk.Frame):
         self.status = Label(self,text=message_text,bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
+    # For saving a new card to the deck.
     def save_card(self, deck_name):
         global mainController
         global mainDeckName
@@ -742,7 +733,7 @@ class editDecks(tk.Frame):
         elif len(self.backCard.get()) == 0:
             self.status = Label(self,text="Error: You need to enter a Definition.",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
-        # If the user puts input in both boxes, the deck creation will be successful.
+        # If the user puts input in both boxes, the card creation will be successful.
         else:
             for deck in mainController.get_decks():
                 if deck.get_name() == deck_name:
@@ -758,10 +749,10 @@ class editDecks(tk.Frame):
             self.refresh_buttons()
             return
 
-    def cancel_card(self):
+    def cancel_new_card(self):
         self.refresh_buttons()
         self.status.destroy()
-        self.status = Label(self,text="Card creation cancelled.",bd=1,relief=SUNKEN,anchor=W)
+        self.status = Label(self,text="Cancelled.",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
         return
 
@@ -770,6 +761,7 @@ class editDecks(tk.Frame):
         self.card_def_box.pack_forget()
         self.card_term_label.pack_forget()
         self.card_def_label.pack_forget()
+        self.spaceMessage.pack_forget()
         self.save_button.pack_forget()
         self.cancel_button.pack_forget()
         self.addCard.pack_forget()
@@ -777,21 +769,11 @@ class editDecks(tk.Frame):
         self.editCard.pack(side = "top")
         self.deleteCard.pack(side="top")
 
-    #TODO make it possible to edit cards
-    def edit_card(self):
-        pass
-
-    #==== WORK IN PROGRESS ENDS HERE ================================================================================================
-
     # The function for deleting the card selected by the user.
     def delete_card(self, deck_name):
         global mainController
         global deckName
         global mainFileSys
-
-        # Hide the other two card functionalities for now.
-        self.addCard.pack_forget()
-        self.editCard.pack_forget()
 
         # Check if the user really wants to delete the card.
         dialog_title = 'Deletion Confirmation'
@@ -827,16 +809,107 @@ class editDecks(tk.Frame):
 
         else:
             pass
-        
-        # Reset the buttons which deal with modifying the current deck and card.
+
+
+    #TODO make it possible to edit cards
+    def edit_card(self, deck_name):
+        # this will reformat the GUI with textboxes
+        self.cardFront = self.termList[self.index]
+        self.backCard = self.definitionList[self.index]
+
+        self.previousCard.pack_forget()
+        self.nextCard.pack_forget()
+        self.editCard.pack_forget()
+        self.addCard.pack_forget()
         self.deleteCard.pack_forget()
+        self.termGUI.pack_forget()
+        self.defGUI.pack_forget()
+
+        self.card_term_box.insert(END, self.cardFront)
+        self.card_term_box.pack()
+
+        self.card_def_box.insert(END, self.backCard)
+        self.card_def_box.pack()
+
+        # User needs to click to update card
+        self.button["command"] = lambda : self.save_card_edit(deck_name, self.cardFront, self.backCard)
+        self.button.pack(side="top")
+
+        # To 
+        self.cancel_button["command"] = lambda: self.cancel_edit_card()
+        self.cancel_button.pack()
+
+        # The status bar begins with a message to add cards to the new deck.
+        message_text = "Editing Flashcard from Deck '" + deck_name + "'."
+        self.status = Label(self,text=message_text,bd=1,relief=SUNKEN,anchor=W)
+        self.status.pack(side=BOTTOM,fill=X)
+
+    def save_card_edit(self, deck_name, cardFront, backCard):
+        global mainController
+        global mainDeckName
+        global mainFileSys
+
+        self.status.destroy()
+
+        # This will check if the user actually has a term and definition before it edits the new card.  The first three cases handle both or either being empty.
+        if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
+            self.status = Label(self,text="Error: You need to enter a Term and Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
+        elif len(self.cardFront.get()) == 0:
+            self.status = Label(self,text="Error: You need to enter a Term.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
+        elif len(self.backCard.get()) == 0:
+            self.status = Label(self,text="Error: You need to enter a Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
+        # If the user puts input in both boxes, the deck creation will be successful.
+        else:
+            for deck in mainController.get_decks():
+                if deck.get_name() == deck_name:
+                    deck.edit_card(self.index, cardFront, backCard)
+                    
+                    
+            mainFileSys.write_to_file(mainController)              
+
+            current_deck = mainController.get_deck(deck_name).get_cards()
+            for card in current_deck:
+                if card.get_term() == cardFront:
+                    self.termList[self.index] = card.get_term()
+                    self.definitionList[self.index] = card.get_definition()
+
+        self.card_term_box.delete(0,END)
+        self.card_def_box.delete(0,END)
+
+        self.card_term_box.pack_forget()
+        self.card_def_box.pack_forget()
+        self.button.pack_forget()
+
+        self.termGUI["text"] = self.termList[self.index] + "\n"
+        self.termGUI.pack(side = "top")
+
+        self.defGUI["text"] = self.definitionList[self.index] + "\n"
+        self.defGUI.pack(side = "top")
+
         self.addCard.pack(side = "top")
         self.editCard.pack(side = "top")
-        self.deleteCard.pack(side="top")
+        self.deleteCard.pack(side = "top")
+        self.previousCard.pack(side = "left")
+        self.nextCard.pack(side = "right")
+
+        def cancel_new_card(self):
+            self.status.destroy()
+            self.status = Label(self,text="Cancelled.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
+            self.addCard.pack(side = "top")
+            self.editCard.pack(side = "top")
+            self.deleteCard.pack(side = "top")
+            self.previousCard.pack(side = "left")
+            self.nextCard.pack(side = "right")
+            return
 
     # The function called to return to the main menu.
     def goBack(self):
             self.controller.show_frame(mainMenu)
+
 #=========================================================================================================================================================================
 
 
@@ -853,7 +926,7 @@ class deleteDecks(tk.Frame):
         self.controller = controller
         self.createWidgets()
         # We need private variables for the choice in deletion and for the deck list index to be kept track of.
-        self.choice = tk.Message(self)
+        self.choice = tk.Message(self, font="HeadLine 14 bold", fg="darkgoldenrod", width=1000)
         self.deckList = []
 
     def createWidgets(self):
@@ -861,7 +934,7 @@ class deleteDecks(tk.Frame):
         global mainFileSys
 
         # Make a message to ask the user which deck they wish to work with.
-        welcomeMessage = tk.Message(self)
+        welcomeMessage = tk.Message(self, font="HeadLine 16 bold", fg="darkgoldenrod")
         welcomeMessage["text"] = "\nWhich Deck to Delete?\n"
         welcomeMessage["width"] = 1000
         welcomeMessage.pack(side = "top")
@@ -872,9 +945,7 @@ class deleteDecks(tk.Frame):
 
         # If there are no decks, no buttons will be created for deleting the decks. A message will be displayed to inform the user.
         if not decks:
-            no_decks = tk.Message(self)
-            no_decks["text"] = "\nThere are no decks to delete!\n"
-            no_decks["width"] = 1000
+            no_decks = tk.Message(self, text="\nThere are no decks to delete!\n", font="HeadLine 16 bold", fg="darkgoldenrod", width=1000)
             no_decks.pack(side = "top")
 
         # If the else is reached, then we have decks.
@@ -882,18 +953,17 @@ class deleteDecks(tk.Frame):
         else:
             for deck in decks:
                 deck_name = deck.get_name()
-                self.deck = tk.Button(self)
-                self.deck["text"] = deck_name
+                self.deck = tk.Button(self, text=deck_name, font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
                 # A lambda function is made so that each deck's function is associated with only itself.
                 self.deck["command"] = lambda nameOfDeck = deck_name: self.delete(nameOfDeck)
                 self.deck.pack(side="top")
 
         # Make a button for quitting the program.
-        exit_button = Button(self, text="Quit Program", command=self.quit)
+        exit_button = Button(self, text="Quit Program", font='Fireye 16 bold', fg="red", activeforeground="red", command=self.quit)
         exit_button.pack(side = "bottom")
-        
+
         # Make a button for returning to the main menu.
-        main_menu_button = Button(self, text="Go back to Main Menu", command=self.goBack)
+        main_menu_button = Button(self, text="Go back to Main Menu", font="Fireye 14 bold", fg="sienna4", activeforeground="LightSkyBlue1", command=self.goBack)
         main_menu_button.pack(side = "bottom")
 
     # This function prompts the user to confirm the deletion. If they confirm, then the deck is deleted.
@@ -905,8 +975,7 @@ class deleteDecks(tk.Frame):
         dialog_title = 'Deletion Confirmation'
         dialog_text = 'Are you sure you want to delete this deck?'
         answer = tkinter.messagebox.askquestion(dialog_title, dialog_text)
-        
-        
+
         if answer == 'yes':
             # Check if the user has already deleted that deck in the current "Delete Decks" window
             if not mainController.get_deck(deck_name):
@@ -918,9 +987,8 @@ class deleteDecks(tk.Frame):
                 self.choice["text"] = "\nSuccessfully deleted: '" + deck_name + "'.\n\n\n"
         else:
             self.choice["text"] = "\nDeck '" + deck_name + "' has not been deleted.\n\n\n"
-        
+
         # The user's choice will be displayed at the bottom of the screen.
-        self.choice["width"] = 1000
         self.choice.pack(side = "bottom")
 
     # The function called to return to the main menu.
