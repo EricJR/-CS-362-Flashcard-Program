@@ -334,7 +334,7 @@ class addCards(tk.Frame):
             self.status = Label(self,text="Error: You need to enter a Term.",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.backCard.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter an Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Definition.",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         # If the user puts input in both boxes, the deck creation will be successful.
         else:
@@ -541,6 +541,14 @@ class editDecks(tk.Frame):
         self.deleteCard = tk.Button(self, text="Delete Card")
         self.previousCard = tk.Button(self, text="Previous Card")
         self.nextCard = tk.Button(self, text="Next Card")
+        self.cardFront = StringVar()
+        self.backCard = StringVar()
+        self.card_term_label = Label(self, text="Enter Flashcard Term:")
+        self.card_def_label = Label(self, text="Enter Flashcard Definition:")
+        self.card_term_box = tk.Entry(self, textvariable=self.cardFront)
+        self.card_def_box = tk.Entry(self, textvariable=self.backCard)
+        self.save_button = Button(self, text="Save Card")
+        self.cancel_button = Button(self, text="Cancel Card Creation")
     
     def createWidgets(self):
         self.index = 0
@@ -577,6 +585,9 @@ class editDecks(tk.Frame):
         # Make a button for returning to the main menu.
         main_menu_button = Button(self, text="Go back to Main Menu", command=self.goBack)
         main_menu_button.pack(side = "bottom")
+
+        self.status = Label(self,text="",bd=1,relief=SUNKEN,anchor=W)
+        self.status.pack(side=BOTTOM,fill=X)
   
     # This function displays the currently selected deck for editing and the current card.  It also creates the buttons for adding, editing, and deleting.
     def edit(self, deck_name):
@@ -590,6 +601,13 @@ class editDecks(tk.Frame):
         self.editCard.pack_forget()
         self.deleteCard.pack_forget()
         self.emptyDeck.pack_forget()
+        self.status.destroy()
+        self.card_term_box.pack_forget()
+        self.card_def_box.pack_forget()
+        self.card_term_label.pack_forget()
+        self.card_def_label.pack_forget()
+        self.save_button.pack_forget()
+        self.cancel_button.pack_forget()
 
         # Get the deck.
         deck = mainController.get_deck(deck_name)
@@ -610,6 +628,9 @@ class editDecks(tk.Frame):
             self.emptyDeck["text"] = "\nDeck is Empty!\n"
             self.emptyDeck["width"] = 1000
             self.emptyDeck.pack(side = "top")
+
+            self.addCard["command"] = lambda: self.add_card(deck_name)
+            self.addCard.pack(side = "top")
         # If there are cards, we will create the buttons.
         else:
             # Shows information about the current deck and the current card's term and definition.
@@ -667,34 +688,41 @@ class editDecks(tk.Frame):
             self.defGUI["text"] = self.definitionList[self.index] + "\n"
             self.defGUI.pack(side = "top")
 
-    #==== STILL A WORK IN PROGRESS ================================================================================================
 
-    # TODO: make it add cards
-    # Allows the user to add a card to the deck which is currently selected.
+
+
+#==== STILL A WORK IN PROGRESS ================================================================================================
+
+# TODO: make it add cards
+# Allows the user to add a card to the deck which is currently selected.
+
     def add_card(self, deck_name):
+        self.addCard.pack_forget()
         self.editCard.pack_forget()
         self.deleteCard.pack_forget()
-
-        self.cardFront = StringVar()
-        self.backCard = StringVar()
+        self.status.destroy()
 
         # Make labels for "Enter Term:" and "Enter Flashcard Definition:"
-        Label(self, text="Enter Flashcard Term:").pack()
-        self.card_term_box = tk.Entry(self, textvariable=self.cardFront)
+        #self.card_term_label.pack()
+        #self.card_term_box = tk.Entry(self, textvariable=self.cardFront)
         self.card_term_box.pack()
 
-        Label(self, text="Enter Flashcard Definition:").pack()
-        self.card_def_box = tk.Entry(self, textvariable=self.backCard)
+        #self.card_def_label = Label(self, text="Enter Flashcard Definition:")
+        self.card_def_label.pack()
+        #self.card_def_box = tk.Entry(self, textvariable=self.backCard)
         self.card_def_box.pack()
 
         # User needs to click save deck.
-        button = Button(self, text="Save Card", command=self.save_card(deck_name))
-        button.pack()
+        self.save_button["command"] = lambda: self.save_card(deck_name)
+        self.save_button.pack()
+
+        self.cancel_button["command"] = lambda: self.cancel_card()
+        self.cancel_button.pack()
 
         # The status bar begins with a message to add cards to the new deck.
-        #message_text = "Add Flashcards to Deck '" + deck_name + "'."
-        #self.status = Label(self,text=message_text,bd=1,relief=SUNKEN,anchor=W)
-        #self.status.pack(side=BOTTOM,fill=X)
+        message_text = "Add Flashcards to Deck '" + deck_name + "'."
+        self.status = Label(self,text=message_text,bd=1,relief=SUNKEN,anchor=W)
+        self.status.pack(side=BOTTOM,fill=X)
 
     def save_card(self, deck_name):
         global mainController
@@ -702,37 +730,52 @@ class editDecks(tk.Frame):
         global mainFileSys
 
         # Delete the previous status at the bottom of the screen. This will be recreated based on the conditionals below.
-        #self.status.destroy()
+        self.status.destroy()
 
         # This will check if the user actually entered a term and definition before it creates the new card.  The first three cases handle both or either being empty.
         if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
-            return
-            #self.status = Label(self,text="Error: You need to enter a Term and Definition.",bd=1,relief=SUNKEN,anchor=W)
-            #self.status.pack(side=BOTTOM,fill=X)
+            self.status = Label(self,text="Error: You need to enter a Term and Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
         elif len(self.cardFront.get()) == 0:
-            return
-            #self.status = Label(self,text="Error: You need to enter a Term.",bd=1,relief=SUNKEN,anchor=W)
-            #self.status.pack(side=BOTTOM,fill=X)
+            self.status = Label(self,text="Error: You need to enter a Term.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
         elif len(self.backCard.get()) == 0:
-            return
-            #self.status = Label(self,text="Error: You need to enter an Definition.",bd=1,relief=SUNKEN,anchor=W)
-            #self.status.pack(side=BOTTOM,fill=X)
+            self.status = Label(self,text="Error: You need to enter a Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
         # If the user puts input in both boxes, the deck creation will be successful.
         else:
-            deck = mainController.get_deck(deck_name)
-            deck.add_card(self.cardFront.get(), self.backCard.get())
-            
+            for deck in mainController.get_decks():
+                if deck.get_name() == deck_name:
+                    deck.add_card(self.cardFront.get(), self.backCard.get())
+
+            mainFileSys.write_to_file(mainController)    
             # Delete contents in entry fields to "reset" for the next time this function is called.
             self.card_term_box.delete(0,END)
             self.card_def_box.delete(0,END)
             card_text = "Flashcard successfully added to Deck '" + deck_name + "'."
-            #self.status = Label(self,text=card_text,bd=1,relief=SUNKEN,anchor=W)
-            #self.status.pack(side=BOTTOM,fill=X)
-            mainFileSys.write_to_file(mainController)
-            self.addCard.pack_forget()
-            self.addCard.pack(side = "top")
-            self.editCard.pack(side = "top")
-            self.deleteCard.pack(side="top")
+            self.status = Label(self,text=card_text,bd=1,relief=SUNKEN,anchor=W)
+            self.status.pack(side=BOTTOM,fill=X)
+            self.refresh_buttons()
+            return
+
+    def cancel_card(self):
+        self.refresh_buttons()
+        self.status.destroy()
+        self.status = Label(self,text="Card creation cancelled.",bd=1,relief=SUNKEN,anchor=W)
+        self.status.pack(side=BOTTOM,fill=X)
+        return
+
+    def refresh_buttons(self):
+        self.card_term_box.pack_forget()
+        self.card_def_box.pack_forget()
+        self.card_term_label.pack_forget()
+        self.card_def_label.pack_forget()
+        self.save_button.pack_forget()
+        self.cancel_button.pack_forget()
+        self.addCard.pack_forget()
+        self.addCard.pack(side = "top")
+        self.editCard.pack(side = "top")
+        self.deleteCard.pack(side="top")
 
     #TODO make it possible to edit cards
     def edit_card(self):
