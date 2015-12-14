@@ -10,7 +10,6 @@ from flashcard_classes import *
 mainController = FlashcardController()
 mainFileSys = FileSystemStorage()
 deckName = ""
-
 mainFileSys.read_from_file(mainController)
 
 #Helps "switch" windows by hiding windows and raising desired window
@@ -19,7 +18,7 @@ class switchWindow(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         #tk.Tk.wm_title(self,"Create Deck")
-        tk.Tk.geometry(self,"400x400")
+        tk.Tk.geometry(self,"1000x1000")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -32,7 +31,7 @@ class switchWindow(tk.Tk):
 
         self.frames = {}
 
-        for F in (Application,createDeck,addCards,viewCards, viewDecks, deleteDecks):
+        for F in (Application,createDeck,addCards,viewDecks,editDecks,deleteDecks):
 
             frame = F(self.container, self)
 
@@ -47,21 +46,27 @@ class switchWindow(tk.Tk):
     #Used to show the desired frame.  Will name the frame based on the class
     def show_frame(self, c):
         '''Show a frame for the given class'''
+        for F in (Application,createDeck,addCards,viewDecks,editDecks,deleteDecks):
+
+                frame = F(self.container, self)
+
+                self.frames[F] = frame
+                frame.grid(row=0, column=0, sticky="nsew")
+
         if c == Application:
             tk.Tk.wm_title(self,"Team Syntax Error's Flash Card Program")
         elif c == createDeck:
             tk.Tk.wm_title(self,"Create Deck")
         elif c == viewDecks:
-            tk.Tk.wm_title(self,"View Cards")
-            for F in (Application,createDeck,addCards,viewCards, deleteDecks):
-
-                frame = F(self.container, self)
-
-                self.frames[F] = frame
+            tk.Tk.wm_title(self,"View Decks")
+        elif c == editDecks:
+            tk.Tk.wm_title(self,"Edit Decks")
+ 
         # put all of the pages in the same location;
         # the one on the top of the stacking order
         # will be the one that is visible.
-                frame.grid(row=0, column=0, sticky="nsew")
+        elif c == deleteDecks:
+            tk.Tk.wm_title(self,"Delete Decks")
         else:
             tk.Tk.wm_title(self,"Add Cards")
         frame = self.frames[c]
@@ -83,52 +88,52 @@ class Application(tk.Frame):
         #http://www.python-course.eu/tkinter_message_widget.php
     def createWidgets(self):
         #self.master.title("Team Syntax Error's Flash Card Program")
-        #self.master.geometry("400x400")
+        #self.master.geometry("600x600")
         #self.master.config(cursor='dot')
 
         # self.lol = tk.Message(self)
         # self.lol
 
-        self.hi_there = tk.Message(self)
+        hi_there = tk.Message(self)
         #self.hi_there["cursor"] = 'dot'     #Cursor changes to a dot when you hover over 'Flash Card Program'
-        self.hi_there["text"] = "\nFlash Card Program!\n"
+        hi_there["text"] = "\nFlash Card Program!\n"
         #self.hi_there["anchor"] = 'n'
-        self.hi_there["fg"] = 'blue'                        ##Changes font color
-        self.hi_there["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        hi_there["fg"] = 'blue'                        ##Changes font color
+        hi_there["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
         #self.hi_there["bg"] = 'black'                      ##Changes background color
-        self.hi_there.pack(side="top")
+        hi_there.pack(side="top")
 
-        self.newCard = tk.Button(self)
-        self.newCard["text"] = "Create New Flashcard Deck!"
-        self.newCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.newCard["command"] = self.create
-        self.newCard.pack(side="top")
+        newCard = tk.Button(self)
+        newCard["text"] = "Create New Flashcard Deck!"
+        newCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        newCard["command"] = self.create
+        newCard.pack(side="top")
 
         #self.newCard["command"] = root.destroy
 
-        self.viewCard = tk.Button(self)
-        self.viewCard["text"] = "View Flashcard Deck!"
-        self.viewCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.viewCard["command"] = self.view
-        self.viewCard.pack(side="top")
+        viewCard = tk.Button(self)
+        viewCard["text"] = "View Flashcard Deck!"
+        viewCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        viewCard["command"] = self.view
+        viewCard.pack(side="top")
         #self.viewCard["command"] = root.destroy
 
-        self.editCard = tk.Button(self)
-        self.editCard["text"] = "Edit Flashcard Deck!"
-        self.editCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.editCard["command"] = self.edit
-        self.editCard.pack(side="top")
+        editCard = tk.Button(self)
+        editCard["text"] = "Edit Flashcard Deck!"
+        editCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        editCard["command"] = self.edit
+        editCard.pack(side="top")
         #self.editCard["command"] = root.destroy
 
-        self.deleteCard = tk.Button(self)
-        self.deleteCard["text"] = "Delete Flashcard Deck!"
-        self.deleteCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
-        self.deleteCard["command"] = self.delete
-        self.deleteCard.pack(side="top")
+        deleteCard = tk.Button(self)
+        deleteCard["text"] = "Delete Flashcard Deck!"
+        deleteCard["font"] = 'Helvetica 14 bold italic'  ##Sets style, size, bold, italic
+        deleteCard["command"] = self.delete
+        deleteCard.pack(side="top")
         #self.deleteCard["command"] = root.destroy
 
-        self.QUIT = tk.Button(self, text="Quit Program", fg="red", font="Helvetica 14 bold italic", command=self.quit)
-        self.QUIT.pack(side="bottom")
+        QUIT = tk.Button(self, text="Quit Program", fg="red", font="Helvetica 14 bold italic", command=self.quit)
+        QUIT.pack(side="bottom")
 
     def say_hi(self):
         print("Welcome to the flash card program!")
@@ -137,7 +142,7 @@ class Application(tk.Frame):
     def view(self):
         self.controller.show_frame(viewDecks)
     def edit(self):
-        print("Select a Deck")
+        self.controller.show_frame(editDecks)
     def delete(self):
         self.controller.show_frame(deleteDecks)
 
@@ -152,9 +157,6 @@ class createDeck(tk.Frame):
         tk.Frame.__init__(self, master)
         self.controller = controller
         self.createWidgets()
-
-    def goBack(self):
-        self.controller.show_frame(Application)
 
     def createWidgets(self):
 
@@ -216,6 +218,8 @@ class createDeck(tk.Frame):
             self.e1.delete(0,END)
             self.e2.delete(0,END)
 
+    def goBack(self):
+        self.controller.show_frame(Application)
 
 #User will enter Question and Answer. After user presses exit, the cards along with the deck name and description will be saved to the text file
 # Format of newly created deck in textfile will be @@@DeckName~~DeckDescription
@@ -227,9 +231,9 @@ class addCards(tk.Frame):
         self.controller = controller
 
     def goBack(self):
-        self.controller.show_frame(Application)
-        #Will save the deck name if the user just chooses to go back to the main menu
         mainFileSys.write_to_file(mainController)
+        #Will save the deck name if the user just chooses to go back to the main menu
+        self.controller.show_frame(Application)
 
     def createWidgets(self):
 
@@ -280,7 +284,7 @@ class addCards(tk.Frame):
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.backCard.get()) == 0:
             #tkinter.messagebox.showinfo("Error", "You need to enter an Answer!")
-            self.status = Label(self,text="Error: You need to enter an Answer",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter an Answer!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         else:
             for deck in mainController.get_decks():
@@ -299,121 +303,6 @@ class addCards(tk.Frame):
         self.controller.quitProgram()
 
 #View Flashcards
-class viewCards(tk.Frame):
-    """"""
-    #----------------------------------------------------------------------
-    def __init__(self, master,controller):
-        item = tk.Frame.__init__(self, master)
-        self.controller = controller
-        self.createWidgets()
-
-    def createWidgets(self):
-        global mainController
-        global mainFileSys
-        #self.root = parent
-        #self.root.title("Main frame")
-        #self.frame = Tk.Frame(parent)
-        #self.frame.pack()
-
-        self.questionString = []
-        self.answerString = []
-        self.index = 0
-        #debug = True
-
-        decks = mainController.get_decks()
-        for deck in decks:
-            cards = deck.get_cards()
-            for card in cards:
-                self.questionString.append(card.get_term())
-                self.answerString.append(card.get_definition())
-
-        if(len(self.questionString) == 0):
-            hi_there = tk.Message(self)
-            hi_there["text"] = "\nDeck is Empty!\n"
-            hi_there["width"] = 1000
-            hi_there.pack(side = "top")
-
-            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
-            menu.pack(side = "bottom")
-
-        else:
-            hi_there = tk.Message(self)
-            hi_there["text"] = "\nNow Viewing Deck!\n"
-            hi_there["width"] = 1000
-            hi_there.pack(side = "top")
-
-            self.questionGUI = tk.Message(self)
-            self.questionGUI["fg"] = 'black'
-            self.questionGUI["width"] = 600
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
-            self.questionGUI.pack(side = "top")
-
-            self.answerGUI = tk.Message(self)
-            self.answerGUI["fg"] = 'white'
-            self.answerGUI["width"] = 600
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
-            self.answerGUI.pack(side = "top")
-
-            answer = tk.Button(self, text="Flip")
-            answer["command"] = lambda: self.openFrame()
-            answer.pack(side = "top")
-
-            previousCard = tk.Button(self, text="Previous Card")
-            previousCard["command"] = lambda : self.decrementIndex()
-            previousCard.pack(side = "left")
-
-            nextCard = tk.Button(self, text="Next Card")
-            nextCard["command"] = lambda : self.incrementIndex()
-            nextCard.pack(side = "right")
-
-            quit = tk.Button(self, text="Quit Program", command=self.quit)
-            quit.pack(side = "bottom")
-
-            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
-            menu.pack(side = "bottom")
-
-    def incrementIndex(self):
-        self.index += 1
-
-        if (self.index == len(self.questionString)):
-            self.index = len(self.questionString) - 1
-        else:
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
-            self.questionGUI.pack(side = "top")
-
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
-            self.answerGUI.pack(side = "top")
-
-    def decrementIndex(self):
-
-        if (self.index == 0):
-            self.index = 0
-        else:
-            self.index -= 1
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
-            self.questionGUI.pack(side = "top")
-
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
-            self.answerGUI.pack(side = "top")
-
-    def goBack(self):
-            self.controller.show_frame(Application)
-    #----------------------------------------------------------------------
-
-    def openFrame(self):
-        if self.answerGUI["fg"] == 'white':
-            self.answerGUI["fg"] = 'black'
-        elif self.answerGUI["fg"] == 'black':
-            self.answerGUI["fg"] = 'white'
-
-        if self.questionGUI["fg"] == 'black':
-            self.questionGUI["fg"] = 'white'
-        elif self.questionGUI["fg"] == 'white':
-            self.questionGUI["fg"] = 'black'
-
-
-#TODO: CURRENTLY A WORK IN PROGRESS. GET CLICKING ON DECK T OONLY DISPLAY THE DECK SELECTED
-# LOOK UP .withdrawl function to see how to replace the window
 
 class viewDecks(tk.Frame):
     """"""
@@ -422,6 +311,13 @@ class viewDecks(tk.Frame):
         item = tk.Frame.__init__(self, master)
         self.controller = controller
         self.createWidgets()
+        self.trigger = 0
+        self.hi_there = tk.Message(self)
+        self.questionGUI = tk.Message(self)
+        self.answerGUI = tk.Message(self)
+        self.answer = tk.Button(self, text="Flip")
+        self.previousCard = tk.Button(self, text="Previous Card")
+        self.nextCard = tk.Button(self, text="Next Card")
     
     def createWidgets(self):
         
@@ -447,73 +343,78 @@ class viewDecks(tk.Frame):
         quit = tk.Button(self, text="Quit Program", command=self.quit)
         quit.pack(side = "bottom")
 
-        menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+        menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
         menu.pack(side = "bottom")
         
         
-    def view(self, deck_name): 
-        self.deck.pack_forget() ##DELETES LAST DECK BUTTON. NEED IT TO DELETE ALL DECK BUTTONS. 
+    def view(self, deck_name):
+        if self.trigger == 1:
+            self.questionGUI.pack_forget()
+            self.answerGUI.pack_forget()
+            self.answer.pack_forget()
+            self.previousCard.pack_forget()
+            self.nextCard.pack_forget()
+        
+        self.trigger = 1
         
         for deck in mainController.get_decks():
             if deck.get_name() == deck_name:
-                self.questionString = []
-                self.answerString = []
+                self.questionList = []
+                self.answerList = []
                 self.index = 0
                 #debug = True
                 cards = deck.get_cards()
-                for card in cards:
-                    self.questionString.append(card.get_term())
-                    self.answerString.append(card.get_definition())
+                for card in cards: 
+                    self.questionList.append(card.get_term())
+                    self.answerList.append(card.get_definition())
 
-                if(len(self.questionString) == 0):
-                    hi_there = tk.Message(self)
-                    hi_there["text"] = "\nDeck is Empty!\n"
-                    hi_there["width"] = 1000
-                    hi_there.pack(side = "top")
-
-                    menu = tk.Button(self, text="Back to Menu",command=self.goBack)
-                    menu.pack(side = "bottom")
+                if(len(self.questionList) == 0):
+                    self.hi_there = tk.Message(self)
+                    self.hi_there["text"] = "\nDeck is Empty!\n"
+                    self.hi_there["width"] = 1000
+                    self.hi_there.pack(side = "top")
 
                 else:
-                    hi_there = tk.Message(self)
-                    hi_there["text"] = "\nNow Viewing " + deck_name + " Deck!\n"
-                    hi_there["width"] = 1000
-                    hi_there.pack(side = "top")
+                    #self.hi_there = tk.Message(self)
+                    self.hi_there["text"] = "\nNow Viewing Deck " + deck_name + "!\n"
+                    self.hi_there["width"] = 1000
+                    self.hi_there.pack(side = "top")
 
-                    self.questionGUI = tk.Message(self)
+                    #self.questionGUI = tk.Message(self)
                     self.questionGUI["fg"] = 'black'
                     self.questionGUI["width"] = 600
-                    self.questionGUI["text"] = self.questionString[self.index] + "\n"
+                    self.questionGUI["text"] = self.questionList[self.index] + "\n"
                     self.questionGUI.pack(side = "top")
 
-                    self.answerGUI = tk.Message(self)
+                    #self.answerGUI = tk.Message(self)
                     self.answerGUI["fg"] = 'white'
                     self.answerGUI["width"] = 600
-                    self.answerGUI["text"] = self.answerString[self.index] + "\n"
+                    self.answerGUI["text"] = self.answerList[self.index] + "\n"
                     self.answerGUI.pack(side = "top")
 
-                    answer = tk.Button(self, text="Flip")
-                    answer["command"] = lambda: self.openFrame()
-                    answer.pack(side = "top")
+                    #self.answer = tk.Button(self, text="Flip")
+                    self.answer["command"] = lambda: self.openFrame()
+                    self.answer.pack(side = "top")
 
-                    previousCard = tk.Button(self, text="Previous Card")
-                    previousCard["command"] = lambda : self.decrementIndex()
-                    previousCard.pack(side = "left")
+                    #self.previousCard = tk.Button(self, text="Previous Card")
+                    self.previousCard["command"] = lambda : self.decrementIndex()
+                    self.previousCard.pack(side = "left")
 
-                    nextCard = tk.Button(self, text="Next Card")
-                    nextCard["command"] = lambda : self.incrementIndex()
-                    nextCard.pack(side = "right")
+                    #self.nextCard = tk.Button(self, text="Next Card")
+                    self.nextCard["command"] = lambda : self.incrementIndex()
+                    self.nextCard.pack(side = "right")
+                    
 
     def incrementIndex(self):
         self.index += 1
 
-        if (self.index == len(self.questionString)):
-            self.index = len(self.questionString) - 1
+        if (self.index == len(self.questionList)):
+            self.index = len(self.questionList) - 1
         else:
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
     def decrementIndex(self):
@@ -522,10 +423,10 @@ class viewDecks(tk.Frame):
             self.index = 0
         else:
             self.index -= 1
-            self.questionGUI["text"] = self.questionString[self.index] + "\n"
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
             self.questionGUI.pack(side = "top")
 
-            self.answerGUI["text"] = self.answerString[self.index] + "\n"
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
     def goBack(self):
@@ -543,9 +444,137 @@ class viewDecks(tk.Frame):
         elif self.questionGUI["fg"] == 'white':
             self.questionGUI["fg"] = 'black'
 
+class editDecks(tk.Frame):
+    """"""
+    #----------------------------------------------------------------------
+    def __init__(self, master,controller):
+        item = tk.Frame.__init__(self, master)
+        self.controller = controller
+        self.createWidgets()
+        self.trigger = 0
+        self.hi_there = tk.Message(self)
+        self.questionGUI = tk.Message(self)
+        self.answerGUI = tk.Message(self)
+        self.update = tk.Button(self, text="Update Card")
+        self.previousCard = tk.Button(self, text="Previous Card")
+        self.nextCard = tk.Button(self, text="Next Card")
+    
+    def createWidgets(self):
+        
+        self.deckString = []
+        self.index = 0
+       
+        # Testing the file system
+
+        hi_there = tk.Message(self)
+        hi_there["text"] = "\nWhich Deck to Edit?\n"
+        hi_there["width"] = 1000
+        hi_there.pack(side = "top")
+
+        
+        decks = mainController.get_decks()
+        for deck in decks:
+            deck_name = deck.get_name()
+            self.deck = tk.Button(self)
+            self.deck["text"] = deck_name
+            self.deck["command"] = lambda nameOfDeck = deck_name: self.edit(nameOfDeck)
+            self.deck.pack(side="top")
+     
+        quit = tk.Button(self, text="Quit Program", command=self.quit)
+        quit.pack(side = "bottom")
+
+        menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
+        menu.pack(side = "bottom")
+        
+        
+    def edit(self, deck_name):
+        if self.trigger == 1:
+            self.questionGUI.pack_forget()
+            self.answerGUI.pack_forget()
+            self.answer.pack_forget()
+            self.previousCard.pack_forget()
+            self.nextCard.pack_forget()
+        
+        self.trigger = 1
+        
+        for deck in mainController.get_decks():
+            if deck.get_name() == deck_name:
+                self.questionList = []
+                self.answerList = []
+                self.index = 0
+                #debug = True
+                cards = deck.get_cards()
+                for card in cards: 
+                    self.questionList.append(card.get_term())
+                    self.answerList.append(card.get_definition())
+
+                if(len(self.questionList) == 0):
+                    self.hi_there = tk.Message(self)
+                    self.hi_there["text"] = "\nDeck is Empty!\n"
+                    self.hi_there["width"] = 1000
+                    self.hi_there.pack(side = "top")
+
+                else:
+                    #self.hi_there = tk.Message(self)
+                    self.hi_there["text"] = "\nNow Editing Deck " + deck_name + "!\n"
+                    self.hi_there["width"] = 1000
+                    self.hi_there.pack(side = "top")
+
+                    #self.questionGUI = tk.Message(self)
+                    self.questionGUI["width"] = 600
+                    self.questionGUI["text"] = self.questionList[self.index] + "\n"
+                    self.questionGUI.pack(side = "top")
+
+                    #self.answerGUI = tk.Message(self)
+                    self.answerGUI["width"] = 600
+                    self.answerGUI["text"] = self.answerList[self.index] + "\n"
+                    self.answerGUI.pack(side = "top")
+
+                    #self.answer = tk.Button(self, text="Flip")
+                    self.update["command"] = lambda: self.updateCard()
+                    self.update.pack(side = "top")
+
+                    #self.previousCard = tk.Button(self, text="Previous Card")
+                    self.previousCard["command"] = lambda : self.decrementIndex()
+                    self.previousCard.pack(side = "left")
+
+                    #self.nextCard = tk.Button(self, text="Next Card")
+                    self.nextCard["command"] = lambda : self.incrementIndex()
+                    self.nextCard.pack(side = "right")
+                    
+
+    def incrementIndex(self):
+        self.index += 1
+
+        if (self.index == len(self.questionList)):
+            self.index = len(self.questionList) - 1
+        else:
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
+
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
+
+    def decrementIndex(self):
+
+        if (self.index == 0):
+            self.index = 0
+        else:
+            self.index -= 1
+            self.questionGUI["text"] = self.questionList[self.index] + "\n"
+            self.questionGUI.pack(side = "top")
+
+            self.answerGUI["text"] = self.answerList[self.index] + "\n"
+            self.answerGUI.pack(side = "top")
+
+    def updateCard(self):
+        pass
+
+    def goBack(self):
+            self.controller.show_frame(Application)
+    #----------------------------------------------------------------------
 
 class deleteDecks(tk.Frame):
-
     """"""
     #----------------------------------------------------------------------
     def __init__(self, master,controller):
@@ -567,7 +596,7 @@ class deleteDecks(tk.Frame):
             nothing_to_delete["width"] = 1000
             nothing_to_delete.pack(side = "top")
 
-            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
             menu.pack(side = "bottom")
         # if the else is reached, then we have decks
         # create a deck for reach button which will allow us to delete it on click
@@ -589,7 +618,7 @@ class deleteDecks(tk.Frame):
             quit = tk.Button(self, text="Quit Program", command=self.quit)
             quit.pack(side = "bottom")
 
-            menu = tk.Button(self, text="Back to Menu",command=self.goBack)
+            menu = tk.Button(self, text="Go back to Main Menu",command=self.goBack)
             menu.pack(side = "bottom")
 
     def delete(self, deck_name):
