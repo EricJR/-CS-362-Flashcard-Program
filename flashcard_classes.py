@@ -70,6 +70,10 @@ class Deck:
 
     def set_description(self, description):
         self._description = description
+
+    def edit_card(self, index, cardfront, backcard):
+        self.cards[index].set_term(cardfront)
+        self.cards[index].set_definition(backcard)
         
     def add_card(self, term, definition):
         new_card = Flashcard(term, definition)
@@ -105,16 +109,8 @@ class FlashcardController:
     
     def add_cards_to_deck(self, name):
         test_decks = self._decks
-        add_cards_choice = "Y"
-        
-        for deck in test_decks:
-            if deck.get_name() == name:
-                while add_cards_choice != "N":
-                    new_term = input("Enter card term: ")
-                    new_definition = input("Enter card definition: ")
-                    deck.add_card(new_term, new_definition)
-                    add_cards_choice = input("Add more cards? (Y/N): ")
-    
+
+
     def delete_deck(self, deck_name_to_delete):
         for deck in self._decks:
             if deck.get_name() == deck_name_to_delete:
