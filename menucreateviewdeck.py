@@ -9,7 +9,7 @@ from flashcard_classes import *
 
 mainController = FlashcardController()
 mainFileSys = FileSystemStorage()
-deckName = ""
+mainDeckName = ""
 mainFileSys.read_from_file(mainController)
 
 #Helps "switch" windows by hiding windows and raising desired window
@@ -18,7 +18,7 @@ class switchWindow(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         #tk.Tk.wm_title(self,"Create Deck")
-        tk.Tk.geometry(self,"1000x1000")
+        tk.Tk.geometry(self,"600x600")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -145,7 +145,6 @@ class Application(tk.Frame):
         self.controller.show_frame(editDecks)
     def delete(self):
         self.controller.show_frame(deleteDecks)
-
     def quit(self):
         self.controller.quitProgram()
 
@@ -192,7 +191,7 @@ class createDeck(tk.Frame):
     # Print deck to textfile. Display an OK messagebox if successful. Will check if user actually entered deck name and description before saving to controller.
     def saveContents(self):
         global mainController
-        global deckName
+        global mainDeckName
 
         #delete previous status
         self.status.destroy()
@@ -210,7 +209,7 @@ class createDeck(tk.Frame):
             self.status = Label(self,text="Error: You need to enter a Deck Description!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         else:
-            deckName = self.deckName.get()
+            mainDeckName = self.deckName.get()
             mainController.new_deck(self.deckName.get(),self.deckDescription.get())
             tkinter.messagebox.showinfo("Deck Created!", "Successfully created " + self.deckName.get() + "!")
             self.controller.show_frame(addCards)
@@ -229,11 +228,6 @@ class addCards(tk.Frame):
         tk.Frame.__init__(self, master)
         self.createWidgets()
         self.controller = controller
-
-    def goBack(self):
-        mainFileSys.write_to_file(mainController)
-        #Will save the deck name if the user just chooses to go back to the main menu
-        self.controller.show_frame(Application)
 
     def createWidgets(self):
 
@@ -268,7 +262,7 @@ class addCards(tk.Frame):
     #Checks if user entered both front and back information. If they did it will write question and answer to text file.
     def saveContents(self):
         global mainController
-        global deckName
+        global mainDeckName
         global mainFileSys
 
         #Erase old status
@@ -287,9 +281,8 @@ class addCards(tk.Frame):
             self.status = Label(self,text="Error: You need to enter an Answer!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         else:
-            for deck in mainController.get_decks():
-                if deck.get_name() == deckName:
-                    deck.add_card(self.cardFront.get(), self.backCard.get())
+            deck = mainController.get_deck(mainDeckName)
+            deck.add_card(self.cardFront.get(), self.backCard.get())
             #Delete previous entries so user can add more cards if they want
             self.e1.delete(0,END)
             self.e2.delete(0,END)
@@ -297,13 +290,17 @@ class addCards(tk.Frame):
             self.status = Label(self,text="Flashcard successfully added to your Deck!",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
 
+    def goBack(self):
+        mainFileSys.write_to_file(mainController)
+        #Will save the deck name if the user just chooses to go back to the main menu
+        self.controller.show_frame(Application)
+
     #Quit Program will save the contents.
     def quit(self):
         mainFileSys.write_to_file(mainController)
         self.controller.quitProgram()
 
 #View Flashcards
-
 class viewDecks(tk.Frame):
     """"""
     #----------------------------------------------------------------------
@@ -321,7 +318,6 @@ class viewDecks(tk.Frame):
     
     def createWidgets(self):
         
-        self.deckString = []
         self.index = 0
        
         # Testing the file system
@@ -376,7 +372,7 @@ class viewDecks(tk.Frame):
 
                 else:
                     #self.hi_there = tk.Message(self)
-                    self.hi_there["text"] = "\nNow Viewing Deck " + deck_name + "!\n"
+                    self.hi_there["text"] = "\nNow Viewing Deck " + deck_name + "\n"
                     self.hi_there["width"] = 1000
                     self.hi_there.pack(side = "top")
 
@@ -455,13 +451,14 @@ class editDecks(tk.Frame):
         self.hi_there = tk.Message(self)
         self.questionGUI = tk.Message(self)
         self.answerGUI = tk.Message(self)
-        self.update = tk.Button(self, text="Update Card")
+        self.addCard = tk.Button(self, text="Add New Card")
+        self.editCard = tk.Button(self, text="Edit Card")
+        self.deleteCard = tk.Button(self, text="Delete Card")
         self.previousCard = tk.Button(self, text="Previous Card")
         self.nextCard = tk.Button(self, text="Next Card")
     
     def createWidgets(self):
-        
-        self.deckString = []
+
         self.index = 0
        
         # Testing the file system
@@ -491,9 +488,11 @@ class editDecks(tk.Frame):
         if self.trigger == 1:
             self.questionGUI.pack_forget()
             self.answerGUI.pack_forget()
-            self.answer.pack_forget()
             self.previousCard.pack_forget()
             self.nextCard.pack_forget()
+            self.addCard.pack_forget()
+            self.editCard.pack_forget()
+            self.deleteCard.pack_forget()
         
         self.trigger = 1
         
@@ -531,8 +530,16 @@ class editDecks(tk.Frame):
                     self.answerGUI.pack(side = "top")
 
                     #self.answer = tk.Button(self, text="Flip")
-                    self.update["command"] = lambda: self.updateCard()
-                    self.update.pack(side = "top")
+                    self.addCard["command"] = lambda: self.add_card(deck_name)
+                    self.addCard.pack(side = "top")
+
+                    #self.answer = tk.Button(self, text="Flip")
+                    self.editCard["command"] = lambda: self.edit_card()
+                    self.editCard.pack(side = "top")
+
+                    #self.answer = tk.Button(self, text="Flip")
+                    self.deleteCard["command"] = lambda: self.delete_card(deck_name)
+                    self.deleteCard.pack(side = "top")
 
                     #self.previousCard = tk.Button(self, text="Previous Card")
                     self.previousCard["command"] = lambda : self.decrementIndex()
@@ -567,8 +574,60 @@ class editDecks(tk.Frame):
             self.answerGUI["text"] = self.answerList[self.index] + "\n"
             self.answerGUI.pack(side = "top")
 
-    def updateCard(self):
+
+#TODO
+
+    def add_card(self, deck_name):
+        mainDeckName = mainController.get_deck(deck_name)
+        self.controller.show_frame(addCards)
+
+    def edit_card(self):
         pass
+
+    def delete_card(self, deck_name):
+        global mainController
+        global deckName
+        global mainFileSys
+
+        self.addCard.pack_forget()
+        self.editCard.pack_forget()
+
+        dialog_title = 'Deletion Confirmation'
+        dialog_text = 'Are you sure you want to delete this card?'
+        answer = tkinter.messagebox.askquestion(dialog_title, dialog_text)
+        
+        if answer == 'yes':
+            deck = mainController.get_deck(deck_name)
+            for card in deck.get_cards():
+                if card.get_term() == self.questionList[self.index]:
+                    if (self.index == len(self.questionList)-1):
+                        self.questionList.remove(self.questionList[self.index])
+                        self.answerList.remove(self.answerList[self.index])
+                        self.index = self.index - 1
+                    else:  
+                        self.questionList.remove(self.questionList[self.index])
+                        self.answerList.remove(self.answerList[self.index])
+                    deck.remove_card(card.get_term())
+            
+            if len(self.questionList) >= 0: #change the content displayed to reflect the list with the deleted card
+                self.questionGUI["text"] = self.questionList[self.index] + "\n"
+                self.answerGUI["text"] = self.answerList[self.index] + "\n"
+            else: #last card
+                self.index = 0
+                self.questionGUI["text"] = "\n"
+                self.answerGUI["text"] = "\n"          
+                self.hi_there.pack(side = "top")
+            
+            mainFileSys.write_to_file(mainController)
+
+        else:
+            pass
+        
+        self.deleteCard.pack_forget()
+        self.hi_there.pack_forget()
+        self.addCard.pack(side = "top")
+        self.editCard.pack(side = "top")
+        self.deleteCard.pack(side="top")
 
     def goBack(self):
             self.controller.show_frame(Application)
@@ -581,13 +640,15 @@ class deleteDecks(tk.Frame):
         item = tk.Frame.__init__(self, master)
         self.controller = controller
         self.createWidgets()
+        self.success = tk.Message(self)
+        self.deckList = []
 
     def createWidgets(self):
         global mainController
         global mainFileSys
 
         decks = mainController.get_decks()
-
+        self.deckList = decks
         # check if there are decks to delete
         # if there are no decks, we let them know and return to the main menu
         if not decks:
@@ -631,9 +692,9 @@ class deleteDecks(tk.Frame):
             mainFileSys.write_to_file(mainController)
             
             success = tk.Message(self)
-            success["text"] = "\nSuccessfully deleted: '" + deck_name + "'!\n\n\n"
-            success["width"] = 1000
-            success.pack(side = "bottom")
+            self.success["text"] = "\nSuccessfully deleted: '" + deck_name + "'!\n\n\n"
+            self.success["width"] = 1000
+            self.success.pack(side = "bottom")
         else:
             return
 
