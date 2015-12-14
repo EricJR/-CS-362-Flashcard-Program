@@ -553,7 +553,7 @@ class editDecks(tk.Frame):
         self.card_def_box = tk.Entry(self, textvariable=self.backCard, font="HeadLine 13 bold", fg="sienna4")
         self.spaceMessage = tk.Message(self, text=" ", fg="white", font="Fireye 2")
         self.save_button = tk.Button(self, text="Save Card", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
-        self.cancel_button = Button(self, text="Cancel Card Creation")
+        self.cancel_button = tk.Button(self, text="Cancel Card Creation", font="Fireye 16 bold", fg="sienna4", activeforeground="LightSkyBlue1")
 
     def createWidgets(self):
         self.index = 0
