@@ -1,16 +1,34 @@
-import re
-import sys
-import os
+#=======1=========2=========3=========4=========5=========6=========7=========8=========9=========0=========1=========2=========3=========4=========5=========6========7**
+#Course information
+#  Course: CS-362, Software Engineering
+#  Assignment: Final Project
+#  Due date: 2015-Dec-14
+#Project information
+#  Project title: Flash Card Program (aka Never Baguette)
+#  Purpose: There are a multitude of resources available to students to make flash cards, but our goal with Never Baguette was to expand the user’s capabilities. This
+#    program allows those who use it to create flash cards for effective studying.  Users just have to follow simple instructions to create decks of cards. The program
+#    will let them view, edit, and delete decks that they make. It saves paper since everything is done on the computer.  This program will assist countless students on 
+#    their quests for knowledge.
+#  Project files: main.py, flashcard_gui.py, flashcard_classes.py, flashcards_file.txt
+#Module information
+#  Language: Python 3
+#  Date last modified: 2015-Dec-14 (cleaned up some comments)
+#  Purpose: This module creates the classes used in the rest of the program.
+#  File name: flashcard_classes.py
+#  Status: Complete.
+#References and credits
+#  Credits: The internet for its vast knowledge of the library tkinter.
+#Permissions
+#  The source code is free for use by members of the CS-362 class.  Credit this source if you borrow executable statements from this program.  The instructions 
+#  are free to use, but create your own comments.  The comments are intellectual property.
+#
+#===== Begin code area ===================================================================================================================================================
 
-"""
-        decks = ctrler.get_decks()
-        for deck in decks:
-            cards = deck.get_cards()
-            for card in cards:
-                print("Card info: {}\n{}".format(card.get_term(), card.get_definition()))
-                #for card in deck.get_cards():
-                #    print("Added card:\n",card)
-"""
+# TODO: Comment this code
+
+import os
+import re
+
 
 class Flashcard:
     def __init__ (self, term, definition):
@@ -96,8 +114,6 @@ class FlashcardController:
                     new_definition = input("Enter card definition: ")
                     deck.add_card(new_term, new_definition)
                     add_cards_choice = input("Add more cards? (Y/N): ")
-                #for card in deck.get_cards():
-                #    print("Added card:\n",card)
     
     def delete_deck(self, deck_name_to_delete):
         for deck in self._decks:
@@ -167,3 +183,5 @@ class FileSystemStorage:
                 for card in deck.get_cards():
                     card_print = card.get_term() + "~~" + card.get_definition() + "\n"
                     f.write(card_print)
+
+#=======1=========2=========3=========4=========5=========6=========7=========8=========9=========0=========1=========2=========3=========4=========5=========6========7**
