@@ -690,7 +690,6 @@ class editDecks(tk.Frame):
     # For adding an individual card to the currently selected deck.
     def add_card(self, deck_name):
         self.addCard.pack_forget()
-        self.editCard.pack_forget()
         self.deleteCard.pack_forget()
         self.status.destroy()
 
@@ -766,7 +765,6 @@ class editDecks(tk.Frame):
         self.cancel_button.pack_forget()
         self.addCard.pack_forget()
         self.addCard.pack(side = "top")
-        self.editCard.pack(side = "top")
         self.deleteCard.pack(side="top")
 
     # The function for deleting the card selected by the user.
