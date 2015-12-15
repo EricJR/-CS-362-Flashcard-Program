@@ -561,7 +561,7 @@ class editDecks(tk.Frame):
         # Make a message to ask the user which deck they wish to work with.
         welcomeMessage = tk.Message(self, text="\nWhich Deck to Edit\n", font="HeadLine 16 bold", fg="darkgoldenrod", width=1000)
         welcomeMessage.pack(side = "top")
-        
+
         # Get all the decks from the mainController.  They will be needed to make the buttons for each deck.
         decks = mainController.get_decks()
 
@@ -588,10 +588,10 @@ class editDecks(tk.Frame):
 
         self.status = Label(self,text="",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
-  
+
     # This function displays the currently selected deck for editing and the current card.  It also creates the buttons for adding, editing, and deleting.
     def edit(self, deck_name):
-        # Hide the previous buttons so they may be recreated. 
+        # Hide the previous buttons so they may be recreated.
         self.currentDeck.pack_forget()
         self.termGUI.pack_forget()
         self.defGUI.pack_forget()
@@ -620,7 +620,7 @@ class editDecks(tk.Frame):
         self.index = 0
 
         cards = deck.get_cards()
-        for card in cards: 
+        for card in cards:
             self.termList.append(card.get_term())
             self.definitionList.append(card.get_definition())
 
@@ -650,7 +650,7 @@ class editDecks(tk.Frame):
             self.addCard.pack(side = "top")
 
             self.editCard["command"] = lambda: self.edit_card(deck_name)
-            self.editCard.pack(side = "top")
+
 
             self.deleteCard["command"] = lambda: self.delete_card(deck_name)
             self.deleteCard.pack(side = "top")
@@ -660,7 +660,7 @@ class editDecks(tk.Frame):
 
             self.nextCard["command"] = lambda : self.incrementIndex()
             self.nextCard.pack(side = "right")
-                    
+
     # Increment the index. It checks the boundary of the list and changes the card on the screen to the next card if possible.
     def incrementIndex(self):
         self.index += 1
@@ -711,7 +711,7 @@ class editDecks(tk.Frame):
 
         # The status bar begins with a message to add cards to the new deck.
         message_text = "Add Flashcards to Deck '" + deck_name + "'."
-        self.status = Label(self,text=message_text,bd=1,relief=SUNKEN,anchor=W)
+        self.status = Label(self,text=message_text,font="HeadLine 14 bold",fg="black",bd=1,relief=SUNKEN,anchor=W)
         self.status.pack(side=BOTTOM,fill=X)
 
     # For saving a new card to the deck.
@@ -725,13 +725,13 @@ class editDecks(tk.Frame):
 
         # This will check if the user actually entered a term and definition before it creates the new card.  The first three cases handle both or either being empty.
         if len(self.cardFront.get()) == 0 and len(self.backCard.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Term and Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Term and Definition.",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.cardFront.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Term.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Term.",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         elif len(self.backCard.get()) == 0:
-            self.status = Label(self,text="Error: You need to enter a Definition.",bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text="Error: You need to enter a Definition.",font="HeadLine 14 bold",fg="red",bd=1,relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
         # If the user puts input in both boxes, the card creation will be successful.
         else:
@@ -739,12 +739,12 @@ class editDecks(tk.Frame):
                 if deck.get_name() == deck_name:
                     deck.add_card(self.cardFront.get(), self.backCard.get())
 
-            mainFileSys.write_to_file(mainController)    
+            mainFileSys.write_to_file(mainController)
             # Delete contents in entry fields to "reset" for the next time this function is called.
             self.card_term_box.delete(0,END)
             self.card_def_box.delete(0,END)
             card_text = "Flashcard successfully added to Deck '" + deck_name + "'."
-            self.status = Label(self,text=card_text,bd=1,relief=SUNKEN,anchor=W)
+            self.status = Label(self,text=card_text,bd=1,font="HeadLine 14 bold",fg="lime green",relief=SUNKEN,anchor=W)
             self.status.pack(side=BOTTOM,fill=X)
             self.refresh_buttons()
             return
@@ -779,7 +779,7 @@ class editDecks(tk.Frame):
         dialog_title = 'Deletion Confirmation'
         dialog_text = 'Are you sure you want to delete this card?'
         answer = tkinter.messagebox.askquestion(dialog_title, dialog_text)
-        
+
         if answer == 'yes':
             deck = mainController.get_deck(deck_name)
             for card in deck.get_cards():
@@ -789,7 +789,7 @@ class editDecks(tk.Frame):
                         self.termList.remove(self.termList[self.index])
                         self.definitionList.remove(self.definitionList[self.index])
                         self.index = self.index - 1
-                    else:  
+                    else:
                         self.termList.remove(self.termList[self.index])
                         self.definitionList.remove(self.definitionList[self.index])
                     deck.remove_card(card.get_term())
@@ -801,9 +801,9 @@ class editDecks(tk.Frame):
             else:
                 self.index = 0
                 self.termGUI["text"] = "\n"
-                self.defGUI["text"] = "\n"          
+                self.defGUI["text"] = "\n"
                 self.emptyDeck.pack(side = "top")
-            
+
             # Save the changes to the file system.
             mainFileSys.write_to_file(mainController)
 
@@ -835,7 +835,7 @@ class editDecks(tk.Frame):
         self.button["command"] = lambda : self.save_card_edit(deck_name, self.cardFront, self.backCard)
         self.button.pack(side="top")
 
-        # To 
+        # To
         self.cancel_button["command"] = lambda: self.cancel_edit_card()
         self.cancel_button.pack()
 
@@ -866,9 +866,9 @@ class editDecks(tk.Frame):
             for deck in mainController.get_decks():
                 if deck.get_name() == deck_name:
                     deck.edit_card(self.index, cardFront, backCard)
-                    
-                    
-            mainFileSys.write_to_file(mainController)              
+
+
+            mainFileSys.write_to_file(mainController)
 
             current_deck = mainController.get_deck(deck_name).get_cards()
             for card in current_deck:
